@@ -1,0 +1,62 @@
+-- Создание таблицы пользователей
+CREATE TABLE users
+(
+     user_id SERIAL PRIMARY KEY,
+    login VARCHAR(100) UNIQUE NOT NULL,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
+-- Создание таблицы марок машин
+CREATE TABLE brands
+(
+    brand_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) REFERENCES listings(brand_name) UNIQUE NOT NULL
+);
+
+-- Создание таблицы моделей машин, связанных с марками
+CREATE TABLE models
+(
+    model_id SERIAL PRIMARY KEY,
+    brand_id INTEGER REFERENCES brands(brand_id),
+    name VARCHAR(100) REFERENCES listings(model_name)UNIQUE NOT NULL
+);
+
+-- Создание таблицы типов кузовов
+CREATE TABLE body_types
+(
+    body_type_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) REFERENCES listings(body_name) UNIQUE NOT NULL
+);
+
+-- Создание таблицы машин
+CREATE TABLE cars
+(
+    car_id SERIAL PRIMARY KEY,
+    model_id INTEGER REFERENCES models(model_id),
+    body_type_id INTEGER REFERENCES body_types(body_type_id),
+    year INTEGER NOT NULL,
+    mileage INTEGER NOT NULL,
+    price INTEGER NOT NULL,
+    condition VARCHAR(100) NOT NULL -- Состояние машины (новая, б/у и т.д.)
+
+);
+
+-- Создание таблицы объявлений
+CREATE TABLE listings
+(
+
+    listing_id SERIAL PRIMARY KEY,
+    body_name VARCHAR(100) NOT NULL,
+    model_name VARCHAR(100) NOT NULL,
+    brand_name VARCHAR(100) NOT NULL,
+    user_id INTEGER REFERENCES users(user_id),
+    car_id INTEGER REFERENCES cars(car_id),
+    title VARCHAR(100) NOT NULL,
+    description TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(50) NOT NULL -- Статус объявления (активное, продано и т.д.)
+);
