@@ -1,8 +1,16 @@
-package com.auto_catalog.auto__catalog.model;
-import ch.qos.logback.core.model.Model;
+package com.auto_catalog.auto__catalog.store.model;
 import jakarta.persistence.*;
+import lombok.*;
+
 @Entity
 @Table(name = "cars")
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+@Builder
+
 public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,74 +36,5 @@ public class Car {
 
     @Column(name = "condition", nullable = false)
     private String condition;
-    public Car(){
 
-    }
-
-    public Car(Long carId, ModelCar modelCar, BodyType bodyType, Integer year,
-               Integer mileage, Integer price, String condition) {
-        this.carId = carId;
-        this.modelCar = modelCar;
-        this.bodyType = bodyType;
-        this.year = year;
-        this.mileage = mileage;
-        this.price = price;
-        this.condition = condition;
-    }
-
-    public Long getCarId() {
-        return carId;
-    }
-
-    public void setCarId(Long carId) {
-        this.carId = carId;
-    }
-
-    public ModelCar getModel() {
-        return modelCar;
-    }
-
-    public void setModel(ModelCar modelCar) {
-        this.modelCar = modelCar;
-    }
-
-    public BodyType getBodyType() {
-        return bodyType;
-    }
-
-    public void setBodyType(BodyType bodyType) {
-        this.bodyType = bodyType;
-    }
-
-    public Integer getYear() {
-        return year;
-    }
-
-    public void setYear(Integer year) {
-        this.year = year;
-    }
-
-    public Integer getMileage() {
-        return mileage;
-    }
-
-    public void setMileage(Integer mileage) {
-        this.mileage = mileage;
-    }
-
-    public Integer getPrice() {
-        return price;
-    }
-
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
-
-    public String getCondition() {
-        return condition;
-    }
-
-    public void setCondition(String condition) {
-        this.condition = condition;
-    }
 }

@@ -1,2 +1,28 @@
-package com.auto_catalog.auto__catalog.api.dto;public class CarDto {
+package com.auto_catalog.auto__catalog.api.dto;
+
+import com.auto_catalog.auto__catalog.store.model.BodyType;
+import com.auto_catalog.auto__catalog.store.model.ModelCar;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class CarDto {
+    private Long carId;
+
+    private ModelCar modelCar;
+
+    private BodyType bodyType;
+
+    private Integer year;
+
+    private Integer mileage;
+
+    private Integer price;
+
+    private String condition;
 }

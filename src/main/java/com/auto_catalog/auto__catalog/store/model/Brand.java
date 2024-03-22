@@ -1,42 +1,24 @@
-package com.auto_catalog.auto__catalog.model;
+package com.auto_catalog.auto__catalog.store.model;
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
-@Table(name = "brands", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "name")})
+@Table(name = "brands")
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+@Builder
 
 public class Brand {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "brand_id")
-    private Long brandid;
+    private Long brandId;
 
     @Column(name = "name", unique = true, nullable = false)
     private String name;
 
-    public Brand(){
-
-    }
-
-    public Brand(Long brand_id, String name) {
-        this.brandid = brand_id;
-        this.name = name;
-    }
-
-    public Long getBrand_id() {
-        return brandid;
-    }
-
-    public void setBrand_id(Long brand_id) {
-        this.brandid = brand_id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }
 

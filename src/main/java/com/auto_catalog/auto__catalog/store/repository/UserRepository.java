@@ -1,8 +1,22 @@
-package com.auto_catalog.auto__catalog.repository;
+package com.auto_catalog.auto__catalog.store.repository;
 
-import model.User;
+
+import com.auto_catalog.auto__catalog.store.model.User;
+import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+import java.util.List;
+import java.util.Optional;
 
+public interface UserRepository extends JpaRepository<User, Long> {
+    @Override
+    <S extends User> List<S>findAll(Example<S> example);
+
+    Optional<User> findById(Long id);
+
+    boolean deleteUserById(Long id);
+
+    boolean createUser(User user);
+
+    boolean updateUser(User user);
 }

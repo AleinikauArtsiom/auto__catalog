@@ -1,12 +1,16 @@
-package com.auto_catalog.auto__catalog.model;
+package com.auto_catalog.auto__catalog.store.model;
 
 import jakarta.persistence.*;
-import org.springframework.data.annotation.Reference;
+import lombok.*;
 
 @Entity
-@Table(name = "body_types", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "name")
-})
+@Table(name = "body_types")
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+@Builder
 
 public class BodyType {
     @Id
@@ -17,28 +21,5 @@ public class BodyType {
     @Column(name = "name", unique = true, nullable = false)
     private String name;
 
-    public BodyType(){
 
-    }
-
-    public BodyType(Long body_type_id, String name) {
-        this.bodyTypeId = body_type_id;
-        this.name = name;
-    }
-
-    public Long getBody_type_id() {
-        return bodyTypeId;
-    }
-
-    public void setBody_type_id(Long body_type_id) {
-        this.bodyTypeId = body_type_id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }

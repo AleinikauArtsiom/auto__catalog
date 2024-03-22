@@ -1,12 +1,16 @@
-package com.auto_catalog.auto__catalog.model;
+package com.auto_catalog.auto__catalog.store.model;
 
 import jakarta.persistence.*;
-
+import lombok.*;
 
 @Entity
-@Table(name = "models", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "name")
-})
+@Table(name = "models")
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+@Builder
 public class ModelCar {
 
     @Id
@@ -21,37 +25,4 @@ public class ModelCar {
     @Column(name = "name", unique = true, nullable = false)
     private String name;
 
-   public ModelCar(){
-
-   }
-
-    public ModelCar(Long modelId, String name, Brand brand) {
-        this.modelId = modelId;
-        this.name = name;
-        this.brand = brand;
-    }
-
-    public Long getModelId() {
-        return modelId;
-    }
-
-    public void setModelId(Long modelId) {
-        this.modelId = modelId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Brand getBrand() {
-        return brand;
-    }
-
-    public void setBrand(Brand brand) {
-        this.brand = brand;
-    }
 }

@@ -1,13 +1,16 @@
-package com.auto_catalog.auto__catalog.model;
+package com.auto_catalog.auto__catalog.store.model;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
-@Table(name = "users", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "login"),
-        @UniqueConstraint(columnNames = "email")
-        //@UniqueConstraint(columnNames = "userId")
-})
+@Table(name = "users")
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+@Builder
 public class User {
 
     @Id
@@ -15,10 +18,8 @@ public class User {
     @Column(name = "user_id")
     private Long userId;
 
-
     @Column(name = "login", unique = true, nullable = false)
     private String login;
-
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -32,64 +33,4 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-
-
-    public User() {
-    }
-
-    public User(String login, String firstName, String lastName, String email, String password) {
-        this.login = login;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }
