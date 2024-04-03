@@ -21,5 +21,4 @@ public class BodyType {
     @Column(name = "name", unique = true, nullable = false)
     private String name;
 
-
 }

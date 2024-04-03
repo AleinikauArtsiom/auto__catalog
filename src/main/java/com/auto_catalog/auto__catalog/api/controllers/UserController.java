@@ -72,7 +72,7 @@ public class UserController {
 
     @PutMapping(UPDATE_USER)
     public ResponseEntity<HttpStatus> updateUserById(@RequestBody User user) {
-        return new ResponseEntity<>(userService.updateUser(user)?HttpStatus.NO_CONTENT : HttpStatus.CONFLICT);
+        return new ResponseEntity<>(userService.updateUser(user) ? HttpStatus.NO_CONTENT : HttpStatus.CONFLICT);
 
     }
 
@@ -96,7 +96,6 @@ public class UserController {
             return "redirect:/registration";
         }
     }
-
 }
 
 
