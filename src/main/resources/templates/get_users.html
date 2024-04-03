@@ -1,0 +1,16 @@
+<html xmlns:c="">
+<head>
+    <title>All users</title>
+</head>
+<body>
+<c:forEach items="${users}" var="user">
+    <h6>${user.firstName}</h6>
+    <h6>${user.lastName}</h6>
+    <h6>${user.email}</h6>
+    <h6>${user.password}</h6>
+    <h6>${user.userId}</h6>
+    <h6>${user.login}</h6>
+    <h3>----------------------</h3>
+</c:forEach>
+</body>
+</html>
