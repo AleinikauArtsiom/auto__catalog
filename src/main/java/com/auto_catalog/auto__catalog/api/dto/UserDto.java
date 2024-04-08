@@ -11,22 +11,20 @@ import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Data
-@Component
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDto {
 
+    private Long userId;
+
     @NotNull
-    @Size(min = 5, max = 15)
     private String login;
 
     @NotNull
-    @Size(min = 5)
     private String firstName;
 
     @NotNull
-    @Size(min = 5)
     private String lastName;
 
     @NotNull
@@ -34,7 +32,5 @@ public class UserDto {
     private String email;
 
     @NotNull
-    @Size(min = 8, max = 20)
     private String password;
-
 }

@@ -1,14 +1,15 @@
 package com.auto_catalog.auto__catalog.api.services;
 
 import com.auto_catalog.auto__catalog.api.dto.BodyTypeDto;
-import com.auto_catalog.auto__catalog.store.model.BodyType;
-import com.auto_catalog.auto__catalog.store.model.User;
+import com.auto_catalog.auto__catalog.store.entity.BodyType;
 import com.auto_catalog.auto__catalog.store.repository.BodyTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class BodyTypeService {
     private final BodyTypeRepository bodyTypeRepository;
 
@@ -45,8 +46,8 @@ public class BodyTypeService {
         return getBodyTypeById(createdUser.getBodyTypeId()).isPresent();
     }
 
-    public boolean updateBodyType() {
-
-    }
+//    public boolean updateBodyType() {
+//
+//    }
 
 }

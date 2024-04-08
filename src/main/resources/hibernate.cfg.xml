@@ -13,6 +13,6 @@
         <property name="show_sql">true</property>
         <property name="format_sql">true</property>
 
-        <mapping class="com.auto_catalog.auto__catalog.store.model.User"/>
+        <mapping class="com.auto_catalog.auto__catalog.store.entity.User"/>
     </session-factory>
 </hibernate-configuration>

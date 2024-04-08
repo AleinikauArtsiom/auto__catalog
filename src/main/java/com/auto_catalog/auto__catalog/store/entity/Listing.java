@@ -1,4 +1,4 @@
-package com.auto_catalog.auto__catalog.store.model;
+package com.auto_catalog.auto__catalog.store.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -6,14 +6,13 @@ import lombok.*;
 import java.security.Timestamp;
 
 
-@Entity
-@Table(name = "listings")
-@Setter
 @Getter
+@Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-@Builder
+@Table(name = "listings")
+@Entity
 public class Listing {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
