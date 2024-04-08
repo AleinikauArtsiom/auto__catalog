@@ -1,23 +1,23 @@
-package com.auto_catalog.auto__catalog.store.model;
+package com.auto_catalog.auto__catalog.store.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.stereotype.Component;
 
-@Component
-@Entity
-@Table(name = "users")
-@Setter
+
 @Getter
+@Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-@Builder
+@Table(name = "users")
+@Entity
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
+    @GeneratedValue(generator="project_seq", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name="project_seq",sequenceName="project_seq", allocationSize=1)
     private Long userId;
 
     @Column(name = "login", unique = true, nullable = false)

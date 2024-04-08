@@ -1,7 +1,8 @@
 package com.auto_catalog.auto__catalog.api.dto;
 
-import com.auto_catalog.auto__catalog.store.model.Car;
-import com.auto_catalog.auto__catalog.store.model.User;
+import com.auto_catalog.auto__catalog.store.entity.Car;
+import com.auto_catalog.auto__catalog.store.entity.User;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.security.Timestamp;
@@ -28,8 +29,10 @@ public class ListingDto {
 
     private String description;
 
+    @JsonProperty(namespace = "created_at")
     private Timestamp createdAt;
 
+    @JsonProperty(namespace = "updated_at")
     private Timestamp updatedAt;
 
     private String status;

@@ -1,16 +1,15 @@
-package com.auto_catalog.auto__catalog.store.model;
+package com.auto_catalog.auto__catalog.store.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity
-@Table(name = "models")
-@Setter
 @Getter
+@Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-@Builder
+@Table(name = "models")
+@Entity
 public class ModelCar {
 
     @Id
@@ -26,3 +25,4 @@ public class ModelCar {
     private String name;
 
 }
+

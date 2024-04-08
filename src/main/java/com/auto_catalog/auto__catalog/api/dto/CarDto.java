@@ -1,7 +1,7 @@
 package com.auto_catalog.auto__catalog.api.dto;
 
-import com.auto_catalog.auto__catalog.store.model.BodyType;
-import com.auto_catalog.auto__catalog.store.model.ModelCar;
+import com.auto_catalog.auto__catalog.store.entity.BodyType;
+import com.auto_catalog.auto__catalog.store.entity.ModelCar;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

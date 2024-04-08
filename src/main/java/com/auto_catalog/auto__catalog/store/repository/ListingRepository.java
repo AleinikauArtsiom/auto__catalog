@@ -1,6 +1,6 @@
 package com.auto_catalog.auto__catalog.store.repository;
 
-import com.auto_catalog.auto__catalog.store.model.Listing;
+import com.auto_catalog.auto__catalog.store.entity.Listing;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ListingRepository extends JpaRepository<Listing, Long> {

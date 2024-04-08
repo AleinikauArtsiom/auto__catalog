@@ -1,6 +1,6 @@
 package com.auto_catalog.auto__catalog.api.dto;
 
-import com.auto_catalog.auto__catalog.store.model.Brand;
+import com.auto_catalog.auto__catalog.store.entity.Brand;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
