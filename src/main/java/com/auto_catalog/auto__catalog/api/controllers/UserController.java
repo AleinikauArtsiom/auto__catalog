@@ -76,11 +76,11 @@ public class UserController {
 
     }
 
-    @GetMapping("/registration")
+   /* @GetMapping("/registration")
     public String creUser(ModelMap modelMap) {
         modelMap.addAttribute("userDto", new UserDto());
         return "registration";
-    }
+    }*/
 
     @PostMapping("/registration")
     public String createUser(@ModelAttribute @Valid UserDto userDto, ModelMap modelMap, BindingResult bindingResult, HttpServletResponse response) {
@@ -93,7 +93,8 @@ public class UserController {
 
         } else {
             response.setStatus(409);
-            return "redirect:/registration";
+            return "failure";
+           // return "redirect:/registration";
         }
     }
 }

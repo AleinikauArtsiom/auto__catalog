@@ -2,7 +2,9 @@ package com.auto_catalog.auto__catalog.store.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.stereotype.Component;
 
+@Component
 @Entity
 @Table(name = "body_types")
 @Setter
