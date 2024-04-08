@@ -42,6 +42,7 @@ public class UserController {
     public ResponseEntity deleteUserById(@PathVariable Long user_id) {
         userService.deleteUserById(user_id);
         return ResponseEntity.noContent().build();
+        // Artem lox
     }
 
     @PostMapping
