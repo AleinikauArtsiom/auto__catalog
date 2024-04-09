@@ -1,6 +1,9 @@
 package com.auto_catalog.auto__catalog.api.services;
 import com.auto_catalog.auto__catalog.api.dto.BrandDto;
+import com.auto_catalog.auto__catalog.api.dtoFactories.BrandDtoFactory;
+import com.auto_catalog.auto__catalog.api.exception.NotFoundException;
 import com.auto_catalog.auto__catalog.store.entity.Brand;
+import com.auto_catalog.auto__catalog.store.entity.User;
 import com.auto_catalog.auto__catalog.store.repository.BrandRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,33 +16,38 @@ import java.util.Optional;
 
 public class BrandService {
     private final BrandRepository brandRepository;
+    private final BrandDtoFactory brandDtoFactory;
 
     @Autowired
-    public BrandService(BrandRepository brandRepository) {
+    public BrandService(BrandRepository brandRepository, BrandDtoFactory brandDtoFactory) {
         this.brandRepository = brandRepository;
+        this.brandDtoFactory = brandDtoFactory;
     }
     public List<Brand> getAllBrand() {
         return brandRepository.findAll();
 
     }
 
-    public boolean deleteBrandById(Long id) {
+    public void deleteBrandById(Long id) {
+        getBrandOrThrowException(id);
         brandRepository.deleteById(id);
-        return getBrandById(id).isEmpty();
+    }
+    private Brand getBrandOrThrowException(Long id) {
+        return brandRepository
+                .findById(id)
+                .orElseThrow(() -> new NotFoundException("User with " + id + " doesn't exist"));
     }
 
-
-
-    public Optional<Brand> getBrandById(Long id) {
-        return brandRepository.findById(id);
-
+    public Brand getBrandById(Long id) {
+        return getBrandOrThrowException(id);
     }
 
-    public boolean createBrand(@Valid BrandDto brandDto) {
-        Brand brand = new Brand();
-        brand.setName(brandDto.getName());
-        Brand createdBrand = brandRepository.save(brand);
-        return getBrandById(createdBrand.getBrandId()).isPresent();
+    public BrandDto createBrand(@Valid BrandDto brandDto) {
+        Brand brand = brandRepository.saveAndFlush(
+              Brand.builder()
+                .name(brandDto.getName()).build()
+        );
+        return brandDtoFactory.makeBrandFactory(brand);
     }
 
     public boolean updateBrand(Brand brand) {

@@ -1,6 +1,5 @@
 package com.auto_catalog.auto__catalog.api.services;
 
-
 import com.auto_catalog.auto__catalog.api.dto.UserDto;
 import com.auto_catalog.auto__catalog.api.dtoFactories.UserDtoFactory;
 import com.auto_catalog.auto__catalog.api.exception.NotFoundException;
@@ -10,11 +9,8 @@ import jakarta.validation.Valid;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class UserService {

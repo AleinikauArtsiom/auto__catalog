@@ -28,12 +28,6 @@ public class BodyTypeService {
         return getBodyTypeById(id).isEmpty();
     }
 
-    //ниже проверочка на то... существует ли заданный айди для удаления
-    public boolean isUserExists(Long id) {
-        Optional<BodyType> bodyTypeOptional = bodyTypeRepository.findById(id);
-        return bodyTypeOptional.isPresent();
-    }
-
     public Optional<BodyType> getBodyTypeById(Long id) {
         return bodyTypeRepository.findById(id);
 

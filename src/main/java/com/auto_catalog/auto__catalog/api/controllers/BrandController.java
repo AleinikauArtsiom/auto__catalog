@@ -31,46 +31,29 @@ public class BrandController {
 
     @GetMapping(FIND_ID_BRAND)
     public ResponseEntity<Brand> getBrandById(@PathVariable("id") Long id) {
-        Optional<Brand> brandOptional = brandService.getBrandById(id);
-        if (brandOptional.isPresent()) {
-            return new ResponseEntity<>(brandOptional.get(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        }
+       Brand brand = brandService.getBrandById(id);
+       return ResponseEntity.ok(brand);
     }
     @GetMapping(FIND_ALL_BRAND)
     public ResponseEntity<List<Brand>> getAllBrand() {
-        return new ResponseEntity<>(brandService.getAllBrand(), HttpStatus.OK);
+       List<Brand> brand = brandService.getAllBrand();
+       return ResponseEntity.ok(brand);
 
     }
     @DeleteMapping(DELETE_BRAND_BY_ID)
     public ResponseEntity<HttpStatus> deleteBrandById(@PathVariable("id") Long id) {
-        return new ResponseEntity<>(brandService.deleteBrandById(id) ? HttpStatus.NO_CONTENT :
-                HttpStatus.CONFLICT);
-
+        brandService.deleteBrandById(id);
+      return ResponseEntity.noContent().build();
 
     }
-
     @PutMapping(UPDATE_BRAND)
     public ResponseEntity<HttpStatus> updateBrand(@RequestBody Brand brand) {
         return new ResponseEntity<>(brandService.updateBrand(brand) ? HttpStatus.NO_CONTENT :
                 HttpStatus.CONFLICT);
-
-
     }
     @PostMapping(CREATE_BRAND)
-    public String createBrand(@ModelAttribute @Valid BrandDto brandDto, ModelMap modelMap, BindingResult bindingResult, HttpServletResponse response) {
-        modelMap.addAttribute("BrandDto", brandDto);
-        modelMap.addAttribute("errors", bindingResult.getAllErrors());
-        if (brandService.createBrand(brandDto)) {
-            response.setStatus(201);
-            return "success";
-
-        } else {
-            response.setStatus(409);
-            return "failure";
-        }
+    public ResponseEntity<BrandDto> createBrand(@Valid @RequestBody BrandDto brandDto) {
+        BrandDto createBrandDto = brandService.createBrand(brandDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createBrandDto);
     }
-
 }
