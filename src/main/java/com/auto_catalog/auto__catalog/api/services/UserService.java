@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -58,28 +59,28 @@ public class UserService {
 
         return userDtoFactory.makeUserDto(user);
     }
-
-    public UserDto updateUser(UserDto userDto) throws BadRequestException {
-        User updatedUser = getUserOrThrowException(userDto.getUserId());
-
-        userRepository
-                .findByLogin(userDto.getLogin())
-                .filter(anotherUser -> !Objects.equals(anotherUser.getLogin(), updatedUser.getLogin()))
-                .orElseThrow(() -> new BadRequestException("User with login " + updatedUser.getLogin() + "' already exists"));
-
-        userRepository.findByEmail(userDto.getEmail())
-                .filter(anotherUser -> !Objects.equals(anotherUser.getEmail(), updatedUser.getEmail()))
-                .orElseThrow(() -> new BadRequestException("User with email " + updatedUser.getEmail() + "' already exists"));
-
-
-        updatedUser.setLogin(userDto.getLogin());
-        updatedUser.setFirstName(userDto.getFirstName());
-        updatedUser.setLastName(userDto.getLastName());
-        updatedUser.setEmail(userDto.getEmail());
-        updatedUser.setPassword(userDto.getPassword());
-
-         User newUser = userRepository.saveAndFlush(updatedUser);
-
-        return userDtoFactory.makeUserDto(newUser);
+    public boolean updateUser(User user){
+        Optional<User> userFromDBOptional = userRepository.findById(user.getUserId());
+        if(userFromDBOptional.isPresent()){
+            User userFromDB = userFromDBOptional.get();
+            if(user.getFirstName() != null){
+                userFromDB.setFirstName(user.getFirstName());
+            }
+            if(user.getLastName()!= null){
+                userFromDB.setLastName(user.getLastName());
+            }
+            if(user.getEmail()!= null){
+                userFromDB.setEmail(user.getEmail());
+            }
+            if(user.getPassword()!= null){
+                userFromDB.setPassword(user.getPassword());
+            }
+            if(user.getLogin()!= null){
+                userFromDB.setLogin(user.getLogin());
+            }
+            User updateUser = userRepository.saveAndFlush(userFromDB);
+            return userFromDB.equals(updateUser);
+        }
+        return false;
     }
 }

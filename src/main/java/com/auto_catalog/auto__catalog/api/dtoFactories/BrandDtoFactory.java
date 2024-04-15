@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class BrandDtoFactory {
-    public BrandDto makeBrandFactory(Brand Brand) {
+    public BrandDto makeBrandFactory(Brand brand) {
         return BrandDto.builder()
-                .name(Brand.getName()).build();
+                .name(brand.getName()).build();
     }
 }

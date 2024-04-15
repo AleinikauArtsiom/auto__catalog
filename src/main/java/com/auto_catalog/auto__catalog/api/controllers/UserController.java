@@ -2,6 +2,7 @@ package com.auto_catalog.auto__catalog.api.controllers;
 
 import com.auto_catalog.auto__catalog.api.dto.UserDto;
 import com.auto_catalog.auto__catalog.api.services.UserService;
+import com.auto_catalog.auto__catalog.store.entity.BodyType;
 import com.auto_catalog.auto__catalog.store.entity.User;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -52,9 +53,9 @@ public class UserController {
 
     @SneakyThrows
     @PutMapping("/{user_id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable Long user_id, @Valid @RequestBody UserDto userDto) {
-        UserDto updatedUserDto = userService.updateUser(userDto);
-        return ResponseEntity.ok(updatedUserDto);
+    public ResponseEntity<HttpStatus> updateUser(@RequestBody User user, @PathVariable Long user_id) {
+        return new ResponseEntity<>(userService.updateUser(user) ? HttpStatus.NO_CONTENT :
+                HttpStatus.CONFLICT);
     }
 }
 

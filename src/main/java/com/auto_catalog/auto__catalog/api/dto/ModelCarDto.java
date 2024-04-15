@@ -14,11 +14,9 @@ public class ModelCarDto {
     private Long modelId;
 
     @NotNull
-    @Size(min = 3, max = 20)
     private Brand brand;
 
     @NotNull
-    @Size(min = 3, max = 20)
     private String name;
 
 }

@@ -27,6 +27,9 @@ public class BrandService {
         return brandRepository.findAll();
 
     }
+    public Brand findByName(String name) {
+        return brandRepository.findByName(name);
+    }
 
     public void deleteBrandById(Long id) {
         getBrandOrThrowException(id);
@@ -51,14 +54,14 @@ public class BrandService {
     }
 
     public boolean updateBrand(Brand brand) {
-        Optional<Brand> brandFromDBOptional = (brandRepository.findById(brand.getBrandId()));
+        Optional<Brand> brandFromDBOptional = brandRepository.findById(brand.getBrandId());
         if (brandFromDBOptional.isPresent()) {
             Brand brandFromDB = brandFromDBOptional.get();
             if (brand.getName() != null) {
                 brandFromDB.setName(brand.getName());
             }
             Brand updatedBrand = brandRepository.save(brandFromDB);
-            return getBrandById(updatedBrand.getBrandId()).isPresent();
+            return updatedBrand != null; // Возвращаем true, если бренд успешно обновлен, иначе false
         }
         return false;
     }
