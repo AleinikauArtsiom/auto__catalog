@@ -5,7 +5,7 @@ import com.auto_catalog.auto__catalog.store.entity.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 
 @Data
 @Builder

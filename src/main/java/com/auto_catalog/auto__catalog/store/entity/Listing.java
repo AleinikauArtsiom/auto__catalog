@@ -3,7 +3,7 @@ package com.auto_catalog.auto__catalog.store.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 
 
 @Getter
@@ -50,5 +50,6 @@ public class Listing {
 
     @Column(name = "status", nullable = false)
     private String status;
+
 
 }

@@ -10,11 +10,11 @@ public class UserDtoFactory {
     public UserDto makeUserDto(User user){
         return UserDto.builder()
                 .userId(user.getUserId())
-                .login(user.getLogin())
+               // .login(user.getLogin())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .email(user.getEmail())
-                .password(user.getPassword())
+               // .password(user.getPassword())
                 .build();
     }
 }

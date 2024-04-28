@@ -49,11 +49,11 @@ public class UserService {
 
         User user = userRepository.saveAndFlush(
                 User.builder()
-                        .login(userDto.getLogin())
+                        //.login(userDto.getLogin())
                         .firstName(userDto.getFirstName())
                         .lastName(userDto.getLastName())
                         .email(userDto.getEmail())
-                        .password(userDto.getPassword())
+                       // .password(userDto.getPassword())
                         .build()
         );
 
@@ -72,12 +72,12 @@ public class UserService {
             if(user.getEmail()!= null){
                 userFromDB.setEmail(user.getEmail());
             }
-            if(user.getPassword()!= null){
+            /*if(user.getPassword()!= null){
                 userFromDB.setPassword(user.getPassword());
             }
             if(user.getLogin()!= null){
                 userFromDB.setLogin(user.getLogin());
-            }
+            }*/
             User updateUser = userRepository.saveAndFlush(userFromDB);
             return userFromDB.equals(updateUser);
         }

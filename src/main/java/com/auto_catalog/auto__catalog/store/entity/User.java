@@ -20,8 +20,8 @@ public class User {
     @SequenceGenerator(name="project_seq",sequenceName="project_seq", allocationSize=1)
     private Long userId;
 
-    @Column(name = "login", unique = true, nullable = false)
-    private String login;
+    /*@Column(name = "login", unique = true, nullable = false)
+    private String login;*/
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -32,8 +32,8 @@ public class User {
     @Column(name = "email", unique = true/*, nullable = false*/)
     private String email;
 
-    @Column(name = "password", nullable = false)
-    private String password;
+   /* @Column(name = "password", nullable = false)
+    private String password;*/
 
 
 }
