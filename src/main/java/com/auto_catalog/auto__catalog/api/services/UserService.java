@@ -3,6 +3,8 @@ package com.auto_catalog.auto__catalog.api.services;
 import com.auto_catalog.auto__catalog.api.dto.UserDto;
 import com.auto_catalog.auto__catalog.api.dtoFactories.UserDtoFactory;
 import com.auto_catalog.auto__catalog.api.exception.NotFoundException;
+import com.auto_catalog.auto__catalog.api.security.entity.UserSecurity;
+import com.auto_catalog.auto__catalog.api.security.repository.UserSecurityRepository;
 import com.auto_catalog.auto__catalog.store.entity.User;
 import com.auto_catalog.auto__catalog.store.repository.UserRepository;
 import jakarta.validation.Valid;
@@ -18,16 +20,29 @@ public class UserService {
     private final UserRepository userRepository;
 
     private final UserDtoFactory userDtoFactory;
+    private final UserSecurityRepository userSecurityRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, UserDtoFactory userDtoFactory) {
+    public UserService(UserRepository userRepository, UserDtoFactory userDtoFactory, UserSecurityRepository userSecurityRepository) {
         this.userRepository = userRepository;
         this.userDtoFactory = userDtoFactory;
+        this.userSecurityRepository = userSecurityRepository;
     }
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
+
+    public Optional<User> getInfoAboutCurrentUser(String username) {
+        Optional<UserSecurity> userSecurity = userSecurityRepository.findByUserLogin(username);
+        if (userSecurity.isEmpty()) {
+            return Optional.empty();
+        }
+        return userRepository.findById(userSecurity.get().getUser().getUserId());
+    }
+
+
+
 
     public User getUserById(Long user_id) {
         return getUserOrThrowException(user_id);

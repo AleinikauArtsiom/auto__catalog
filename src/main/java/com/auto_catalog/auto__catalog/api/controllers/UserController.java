@@ -2,7 +2,6 @@ package com.auto_catalog.auto__catalog.api.controllers;
 
 import com.auto_catalog.auto__catalog.api.dto.UserDto;
 import com.auto_catalog.auto__catalog.api.services.UserService;
-import com.auto_catalog.auto__catalog.store.entity.BodyType;
 import com.auto_catalog.auto__catalog.store.entity.User;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -10,9 +9,12 @@ import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 
 @Transactional
@@ -27,12 +29,23 @@ public class UserController {
         this.userService = userService;
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @GetMapping("/info")
+    public ResponseEntity<User> getInfoAboutCurrentUser(Principal principal){
+        Optional<User> result = userService.getInfoAboutCurrentUser(principal.getName());
+        if (result.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(result.get(), HttpStatus.OK);
+    }
 
+    @PreAuthorize(value = "hasAnyRole('USER')")
     @GetMapping("/{user_id}")
     public ResponseEntity<User> getUserById(@PathVariable Long user_id) {
         User user= userService.getUserById(user_id);

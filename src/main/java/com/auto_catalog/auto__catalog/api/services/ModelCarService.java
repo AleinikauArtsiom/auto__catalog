@@ -52,8 +52,7 @@ public class ModelCarService {
 
         ModelCar modelCar = modelCarRepository.save(
                 ModelCar.builder()
-                        .name(modelCarDto.getName())
-                        .brand(brand)
+                        .name(modelCarDto.getName()).brand(brand)
                         .build()
         );
         return modelCarDtoFactory.makeModelCarDtoFactory(modelCar);
