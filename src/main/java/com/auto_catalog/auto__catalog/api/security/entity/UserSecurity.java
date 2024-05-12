@@ -9,8 +9,8 @@ import lombok.Data;
 @Entity(name = "user_security")
 public class UserSecurity {
     @Id
-    @SequenceGenerator(name="secSeqGen",sequenceName="user_security_id_seq", allocationSize=1)
-    @GeneratedValue(generator="secSeqGen")
+    @GeneratedValue(generator="security_Gen", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name="security_Gen",sequenceName="security_Gen", allocationSize=1)
     private Long id;
 
     @Column(name = "user_login")
@@ -25,6 +25,7 @@ public class UserSecurity {
     @Column(name = "role")
     @NotNull
     private Roles role;
+
 
     @ManyToOne
     @JoinColumn(name = "user_id")

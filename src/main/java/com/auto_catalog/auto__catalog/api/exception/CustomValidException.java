@@ -1,7 +1,7 @@
 package com.auto_catalog.auto__catalog.api.exception;
 
 public class CustomValidException extends RuntimeException{
-    private String message;
+    private final String message;
 
     public CustomValidException(String message){
         this.message = message;

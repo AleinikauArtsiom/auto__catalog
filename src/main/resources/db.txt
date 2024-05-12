@@ -1,3 +1,14 @@
+44,ArtiAdmin123@mail.ru,Arti,Aley
+1,ArtiUser123@mail.ru,UARTI,Uley
+
+
+56,false,ADMIN,44,ArtiADMIN,admin
+1,false,USER,1,ArtiUSER,user
+
+
+
+
+
 -- Создание таблицы пользователей
 CREATE TABLE users
 (

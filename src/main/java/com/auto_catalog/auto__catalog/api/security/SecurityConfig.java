@@ -34,11 +34,16 @@ public class SecurityConfig {
                  .csrf(AbstractHttpConfigurer::disable)
                  .authorizeHttpRequests(auth ->
                          auth.requestMatchers(new AntPathRequestMatcher("/api/v1/users", "GET")).hasRole("ADMIN")
+                                 .requestMatchers(new AntPathRequestMatcher("/api/v1/security/registration", "POST")).permitAll()
+                                 .requestMatchers(new AntPathRequestMatcher("/api/v1/security/token", "POST")).permitAll()
+
+                                 .requestMatchers(new AntPathRequestMatcher("/admin", "POST")).hasRole("ADMIN")
                                  .anyRequest().authenticated())
                  .userDetailsService(customUserDetailService)
                  .httpBasic(Customizer.withDefaults() )
                  .build();
     }
+
     /*@Bean
     public UserDetailsService userDetailsService(){
        UserDetails userAdmin = User.builder()
