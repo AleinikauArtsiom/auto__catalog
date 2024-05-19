@@ -6,14 +6,12 @@ import com.auto_catalog.auto__catalog.api.security.entity.dto.UserSecRegistratio
 import com.auto_catalog.auto__catalog.api.security.service.UserSecurityService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.BeanDefinitionDsl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -44,16 +42,24 @@ public class SecurityController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    /* @PostMapping("/admin")
-     public ResponseEntity<HttpStatus> changeRoleToAdmin(Long id )
+     @PostMapping("/admin/{id}")
+     public void promoteUserToAdmin(@PathVariable Long  id){
+        userSecurityService.promoteUserToAdmin(id);
 
- }*/
+ }
     @PostMapping("/token")
-    public ResponseEntity<AuthResponseDto> generateToken(@RequestBody AuthRequestDto authRequestDto) {
-        Optional<String> token = userSecurityService.generateToken(authRequestDto);
-        if(token.isPresent()){
-            return new ResponseEntity<>(new AuthResponseDto(token.get()), HttpStatus.CREATED);
+    public ResponseEntity<?> generateToken(@RequestBody AuthRequestDto authRequestDto) {
+        try {
+            Optional<String> token = userSecurityService.generateToken(authRequestDto);
+            if (token.isPresent()) {
+                return ResponseEntity.ok(new AuthResponseDto(token.get()));
+            }
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+        } catch (IllegalArgumentException e) {
+            if ("User is blocked".equals(e.getMessage())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User is blocked");
+            }
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
         }
-        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 }

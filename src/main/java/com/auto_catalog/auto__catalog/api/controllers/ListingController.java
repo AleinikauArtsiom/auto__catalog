@@ -3,6 +3,8 @@ package com.auto_catalog.auto__catalog.api.controllers;
 import com.auto_catalog.auto__catalog.api.dto.ListingDto;
 import com.auto_catalog.auto__catalog.api.services.ListingService;
 import com.auto_catalog.auto__catalog.store.entity.Listing;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@SecurityRequirement(name = "Bearer Authentication")
+@Transactional
 @RestController
 @RequestMapping("/listings")
 public class ListingController {

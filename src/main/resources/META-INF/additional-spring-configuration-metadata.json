@@ -1,0 +1,13 @@
+{
+  "properties": [
+    {
+      "name": "spring.jwt.token.expirationTime",
+      "type": "java.lang.String",
+      "description": "Description for spring.jwt.token.expirationTime."
+    },
+    {
+      "name": "spring.jwt.token.secret",
+      "type": "java.lang.String",
+      "description": "Description for spring.jwt.token.secret."
+    }
+  ] }

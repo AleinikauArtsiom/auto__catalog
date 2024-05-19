@@ -55,7 +55,7 @@ public class ListingService {
                 .description(listingDto.getDescription())
                 .createdAt(Timestamp.valueOf(LocalDateTime.now()))
                 .updatedAt(Timestamp.valueOf(LocalDateTime.now())).build
-               ();
+                        ();
         return listingDtoFactory.makeListingDto(listing);
     }
 

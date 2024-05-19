@@ -24,15 +24,18 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-     Optional<UserSecurity> securityInfoOptional = userSecurityRepository.findByUserLogin(username);
-     if(securityInfoOptional.isEmpty()){
-         throw new UsernameNotFoundException("Username not found: " + username);
-     }
-     UserSecurity userSecurity = securityInfoOptional.get();
-     return User.builder()
-             .username(userSecurity.getUserLogin())
-             .password(userSecurity.getUserPassword())
-             .roles(userSecurity.getRole().toString())
-             .build();
+        Optional<UserSecurity> securityInfoOptional = userSecurityRepository.findByUserLogin(username);
+        if (securityInfoOptional.isEmpty()) {
+            throw new UsernameNotFoundException("Username not found: " + username);
+        }
+        UserSecurity userSecurity = securityInfoOptional.get();
+        if (userSecurity.getIsBlocked()) {
+            throw new UsernameNotFoundException("User is blocked");
+        }
+        return User.builder()
+                .username(userSecurity.getUserLogin())
+                .password(userSecurity.getUserPassword())
+                .roles(userSecurity.getRole().toString())
+                .build();
     }
 }

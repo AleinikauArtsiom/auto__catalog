@@ -21,7 +21,7 @@ public class UserSecRegistrationDto {
 
 
     @NotNull
-    @Size(min = 8, max = 30)
+    @Size(min = 2, max = 30)
    /* @Pattern.List({
             @Pattern(regexp = "^(?=.*[0-9]).+$", message = "Password must contain at least one digit"),
             @Pattern(regexp = "^(?=.*[a-z]).+$", message = "Password must contain at least one lowercase letter"),

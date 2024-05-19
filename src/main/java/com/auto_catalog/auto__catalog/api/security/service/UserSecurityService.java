@@ -20,12 +20,14 @@ public class UserSecurityService {
     private final PasswordEncoder passwordEncoder;
     private final UserSecurityRepository userSecurityRepository;
     private final UserRepository userRepository;
+    private final JwtUtils jwtUtils;
     @Autowired
     public UserSecurityService(UserSecurityRepository userSecurityRepository,
-                               PasswordEncoder passwordEncoder,UserRepository userRepository) {
+                               PasswordEncoder passwordEncoder,UserRepository userRepository,JwtUtils jwtUtils) {
         this.userSecurityRepository = userSecurityRepository;
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
+        this.jwtUtils=jwtUtils;
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -51,13 +53,28 @@ public class UserSecurityService {
         userSecurityRepository.save(userSecurity);
     }
 
-    public Optional<String> generateToken(AuthRequestDto authRequestDto){
-      Optional<UserSecurity> security =   userSecurityRepository.findByUserLogin(authRequestDto.getLogin());
-      if(security.isPresent() &&
-              passwordEncoder.matches(authRequestDto.getPassword(), security.get().getUserPassword())){
-          return Optional.of("SUCCESS");
-
-      }
+    public Optional<String> generateToken(AuthRequestDto authRequestDto) {
+        Optional<UserSecurity> security = userSecurityRepository.findByUserLogin(authRequestDto.getLogin());
+        if (security.isPresent()) {
+            UserSecurity userSecurity = security.get();
+            if (userSecurity.getIsBlocked()) {
+                throw new IllegalArgumentException("User is blocked");
+            }
+            if (passwordEncoder.matches(authRequestDto.getPassword(), userSecurity.getUserPassword())) {
+                return Optional.of(jwtUtils.generateJwtToken(authRequestDto.getLogin()));
+            }
+        }
         return Optional.empty();
+    }
+    @Transactional
+    public void promoteUserToAdmin(Long id) {
+        // Поиск пользователя по ID
+        UserSecurity user = userSecurityRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("No user found with ID " + id));
+        // Смена роли на ADMIN
+        user.setRole(Roles.valueOf("ADMIN"));
+        userSecurityRepository.save(user);
+        System.out.println("Role of user with ID " + id + " has been changed to ADMIN");
+
     }
 }

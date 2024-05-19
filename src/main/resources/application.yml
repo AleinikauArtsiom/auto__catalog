@@ -8,8 +8,12 @@ spring:
     username: postgres
     driver-class-name: org.postgresql.Driver
 
+  jwt:
+    token:
+      expirationTime: 10000
+      secret: c87f94e5-64ec-455a-a73b-e6c6c759c2e6
+
 
   jpa:
     hibernate:
       ddl-auto: update
-
