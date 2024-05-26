@@ -6,7 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-@Entity(name = "user_security")
+@Entity
+@Table(name = "user_security")
 public class UserSecurity {
     @Id
     @GeneratedValue(generator="security_Gen", strategy = GenerationType.SEQUENCE)
@@ -27,8 +28,8 @@ public class UserSecurity {
     private Roles role;
 
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @Column(name = "is_blocked")

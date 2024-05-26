@@ -1,7 +1,5 @@
 package com.auto_catalog.auto__catalog.api.dto;
 
-import com.auto_catalog.auto__catalog.store.entity.Car;
-import com.auto_catalog.auto__catalog.store.entity.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
@@ -21,13 +19,17 @@ public class ListingDto {
 
     private String brandName;
 
-    private User user;
-
-    private Car car;
-
     private String title;
 
     private String description;
+
+    private Integer year;
+
+    private Integer mileage;
+
+    private Integer price;
+
+    private String condition;
 
     @JsonProperty(namespace = "created_at")
     private Timestamp createdAt;
@@ -36,5 +38,4 @@ public class ListingDto {
     private Timestamp updatedAt;
 
     private String status;
-
 }

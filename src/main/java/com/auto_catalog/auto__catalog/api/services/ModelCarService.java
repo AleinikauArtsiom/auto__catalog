@@ -28,15 +28,16 @@ public class ModelCarService {
         this.brandRepository = brandRepository;
 
     }
+
     public List<ModelCar> getAllModelCars() {
         return modelCarRepository.findAll();
-
     }
 
     public void deleteModelCarById(Long id) {
         getModelCarOrThrowException(id);
         modelCarRepository.deleteById(id);
     }
+
     private ModelCar getModelCarOrThrowException(Long id) {
         return modelCarRepository
                 .findById(id)
@@ -48,15 +49,26 @@ public class ModelCarService {
     }
 
     public ModelCarDto createModelCar(@Valid ModelCarDto modelCarDto) {
-        Brand brand = brandRepository.findByName(modelCarDto.getBrand().getName());
+        // Найти или создать бренд по имени
+        Brand brand = brandRepository.findByName(modelCarDto.getBrandName())
+                .orElseGet(() -> {
+                    Brand newBrand = new Brand();
+                    newBrand.setName(modelCarDto.getBrandName());
+                    return brandRepository.save(newBrand);
+                });
 
+        // Создать и сохранить ModelCar
         ModelCar modelCar = modelCarRepository.save(
                 ModelCar.builder()
-                        .name(modelCarDto.getName()).brand(brand)
+                        .name(modelCarDto.getName())
+                        .brand(brand)
                         .build()
         );
+
+        // Вернуть DTO
         return modelCarDtoFactory.makeModelCarDtoFactory(modelCar);
     }
+
     public boolean updateModelCar(ModelCarDto modelCarDto) {
         Optional<ModelCar> modelCarOptional = modelCarRepository.findById(modelCarDto.getModelId());
         if (modelCarOptional.isPresent()) {
@@ -64,15 +76,14 @@ public class ModelCarService {
             if (modelCarDto.getName() != null) {
                 modelCarFromDB.setName(modelCarDto.getName());
             }
-            if (modelCarDto.getBrand() != null) {
-                Brand brand = brandRepository.findByName(modelCarDto.getBrand().getName());
-                if (brand != null) { // Проверяем, найден ли бренд
-                    modelCarFromDB.setBrand(brand);
-                }
+            if (modelCarDto.getBrandName() != null) {
+                Optional<Brand> brandOptional = brandRepository.findByName(modelCarDto.getBrandName());
+                brandOptional.ifPresent(modelCarFromDB::setBrand);
             }
             ModelCar updatedModelCar = modelCarRepository.save(modelCarFromDB);
-            return updatedModelCar != null; // Возвращаем true, если модель автомобиля успешно обновлена, иначе false
+            return updatedModelCar != null;
         }
         return false;
     }
+
 }

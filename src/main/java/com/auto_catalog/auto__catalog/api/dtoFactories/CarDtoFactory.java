@@ -10,8 +10,8 @@ public class CarDtoFactory {
     public CarDto makeCarDto(Car car) {
         return CarDto.builder()
                 .carId(car.getCarId())
-                .modelCar(car.getModelCar())
-                .bodyType(car.getBodyType())
+                .modelName(car.getModelCar().getName())
+                .bodyTypeName(car.getBodyType().getName())
                 .year(car.getYear())
                 .mileage(car.getMileage())
                 .price(car.getPrice())

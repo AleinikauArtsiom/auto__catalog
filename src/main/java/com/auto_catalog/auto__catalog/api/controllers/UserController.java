@@ -53,7 +53,7 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-   @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{user_id}")
     public ResponseEntity<HttpStatus> deleteUserById(@PathVariable Long user_id) {
         userService.deleteUserById(user_id);
@@ -61,12 +61,12 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-   @SneakyThrows
-   @PutMapping("/{user_id}")
-   public ResponseEntity<HttpStatus> updateUser(@PathVariable Long user_id, @RequestBody User user) {
-       return new ResponseEntity<>(userService.updateUser(user) ? HttpStatus.NO_CONTENT :
-               HttpStatus.CONFLICT);
-   }
+    @SneakyThrows
+    @PutMapping("/{user_id}")
+    public ResponseEntity<HttpStatus> updateUser(@PathVariable Long user_id, @RequestBody User user) {
+        return new ResponseEntity<>(userService.updateUser(user) ? HttpStatus.NO_CONTENT :
+                HttpStatus.CONFLICT);
+    }
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto) {
@@ -74,7 +74,3 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUserDto);
     }
 }
-
-
-
-

@@ -11,6 +11,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -32,6 +34,12 @@ public class UserDto {
     //@Pattern(regexp = "^.*@.*[a-zA-Z].*$", message = "Invalid email format")
     private String email;
 
+    /*@NotNull
+    private String password;*/
+
+   /* @NotNull
+    private Integer listingCount;
+
     @NotNull
-    private String password;
+    private List<Long> listingIds;*/
 }

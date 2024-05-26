@@ -1,6 +1,5 @@
 package com.auto_catalog.auto__catalog.api.security.filter;
 
-import com.auto_catalog.auto__catalog.api.security.entity.UserSecurity;
 import com.auto_catalog.auto__catalog.api.security.service.CustomUserDetailService;
 import com.auto_catalog.auto__catalog.api.security.service.JwtUtils;
 import jakarta.servlet.FilterChain;
@@ -25,25 +24,19 @@ public class JwtFilter extends OncePerRequestFilter {
     private final JwtUtils jwtUtils;
     private final CustomUserDetailService customUserDetailService;
 
-
     @Autowired
     public JwtFilter(JwtUtils jwtUtils, CustomUserDetailService customUserDetailService) {
         this.jwtUtils = jwtUtils;
         this.customUserDetailService = customUserDetailService;
-
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         Optional<String> token = jwtUtils.getTokenFromRequest(request);
-        if (token.isPresent() && jwtUtils.validateToken(token.get())) {
+        if(token.isPresent() && jwtUtils.validateToken(token.get())){
             Optional<String> login = jwtUtils.getLoginFromToken(token.get());
-            if (login.isPresent()) {
+            if(login.isPresent()){
                 UserDetails userDetails = customUserDetailService.loadUserByUsername(login.get());
-                if (((UserSecurity) userDetails).getIsBlocked()) {
-                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User is blocked");
-                    return;
-                }
                 UsernamePasswordAuthenticationToken uPassAuthToken =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(uPassAuthToken);

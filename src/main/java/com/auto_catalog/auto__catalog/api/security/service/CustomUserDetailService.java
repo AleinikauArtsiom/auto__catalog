@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+
 @Slf4j
 @Service
 public class CustomUserDetailService implements UserDetailsService {
@@ -21,7 +22,6 @@ public class CustomUserDetailService implements UserDetailsService {
         this.userSecurityRepository = userSecurityRepository;
     }
 
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<UserSecurity> securityInfoOptional = userSecurityRepository.findByUserLogin(username);
@@ -29,12 +29,10 @@ public class CustomUserDetailService implements UserDetailsService {
             throw new UsernameNotFoundException("Username not found: " + username);
         }
         UserSecurity userSecurity = securityInfoOptional.get();
-        if (userSecurity.getIsBlocked()) {
-            throw new UsernameNotFoundException("User is blocked");
-        }
         return User.builder()
                 .username(userSecurity.getUserLogin())
                 .password(userSecurity.getUserPassword())
+                .disabled(userSecurity.getIsBlocked()) // Используем isBlocked как disabled
                 .roles(userSecurity.getRole().toString())
                 .build();
     }

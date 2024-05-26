@@ -2,7 +2,9 @@ package com.auto_catalog.auto__catalog.store.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.stereotype.Component;
+import org.hibernate.annotations.Formula;
+
+import java.util.List;
 
 
 @Getter
@@ -35,5 +37,12 @@ public class User {
    /* @Column(name = "password", nullable = false)
     private String password;*/
 
+   @Formula("(select count(l.listing_id) from listings l where l.user_id = user_id)")
+   @Column(name = "listing_count")
+   private int listingCount;
+
+    @OneToMany(mappedBy = "user")
+    @Column(name = "listings")
+    private List<Listing> listings;
 
 }

@@ -53,19 +53,15 @@ public class UserSecurityService {
         userSecurityRepository.save(userSecurity);
     }
 
-    public Optional<String> generateToken(AuthRequestDto authRequestDto) {
+    public Optional<String> generateToken(AuthRequestDto authRequestDto){
         Optional<UserSecurity> security = userSecurityRepository.findByUserLogin(authRequestDto.getLogin());
-        if (security.isPresent()) {
-            UserSecurity userSecurity = security.get();
-            if (userSecurity.getIsBlocked()) {
-                throw new IllegalArgumentException("User is blocked");
-            }
-            if (passwordEncoder.matches(authRequestDto.getPassword(), userSecurity.getUserPassword())) {
-                return Optional.of(jwtUtils.generateJwtToken(authRequestDto.getLogin()));
-            }
+        if(security.isPresent() && !security.get().getIsBlocked() &&
+                passwordEncoder.matches(authRequestDto.getPassword(), security.get().getUserPassword())){
+            return Optional.of(jwtUtils.generateJwtToken(authRequestDto.getLogin()));
         }
         return Optional.empty();
     }
+
     @Transactional
     public void promoteUserToAdmin(Long id) {
         // Поиск пользователя по ID

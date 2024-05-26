@@ -1,8 +1,11 @@
 package com.auto_catalog.auto__catalog.api.dtoFactories;
 
 import com.auto_catalog.auto__catalog.api.dto.UserDto;
+import com.auto_catalog.auto__catalog.store.entity.Listing;
 import com.auto_catalog.auto__catalog.store.entity.User;
 import org.springframework.stereotype.Component;
+
+import java.util.stream.Collectors;
 
 @Component
 public class UserDtoFactory {
@@ -15,6 +18,9 @@ public class UserDtoFactory {
                 .lastName(user.getLastName())
                 .email(user.getEmail())
                // .password(user.getPassword())
+                /*.listingCount(user.getListingCount())
+                .listingIds(user.getListings().stream().map(Listing::getListingId).collect(Collectors.toList()))*/
                 .build();
+
     }
 }

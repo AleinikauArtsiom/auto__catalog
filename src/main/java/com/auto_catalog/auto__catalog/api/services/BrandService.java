@@ -3,12 +3,13 @@ import com.auto_catalog.auto__catalog.api.dto.BrandDto;
 import com.auto_catalog.auto__catalog.api.dtoFactories.BrandDtoFactory;
 import com.auto_catalog.auto__catalog.api.exception.NotFoundException;
 import com.auto_catalog.auto__catalog.store.entity.Brand;
-import com.auto_catalog.auto__catalog.store.entity.User;
 import com.auto_catalog.auto__catalog.store.repository.BrandRepository;
+import jakarta.annotation.PostConstruct;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +28,7 @@ public class BrandService {
         return brandRepository.findAll();
 
     }
-    public Brand findByName(String name) {
+    public Optional<Brand> findByName(String name) {
         return brandRepository.findByName(name);
     }
 
@@ -64,5 +65,24 @@ public class BrandService {
             return updatedBrand != null; // Возвращаем true, если бренд успешно обновлен, иначе false
         }
         return false;
+    }
+    @PostConstruct
+    public void populateBrands() {
+        List<String> brandNames = Arrays.asList(
+                "АвтоВАЗ", "Audi", "BMW", "Chevrolet", "Chrysler", "Citroën", "Dodge",
+                "Ferrari", "Fiat", "Ford", "Geely", "Honda", "Hyundai", "Jaguar", "Jeep",
+                "Kia", "Lamborghini", "Land Rover", "Lexus", "Maserati", "Mazda",
+                "Mercedes-Benz", "Mitsubishi", "Nissan", "Opel", "Peugeot", "Porsche",
+                "Renault", "Rolls-Royce", "Saab", "Skoda", "Subaru", "Suzuki", "Tesla",
+                "Toyota", "Volkswagen", "Volvo"
+        );
+
+        for (String name : brandNames) {
+            if (!brandRepository.findByName(name).isPresent()) {
+                Brand brand = new Brand();
+                brand.setName(name);
+                brandRepository.save(brand);
+            }
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.auto_catalog.auto__catalog.api.controllers;
 
+import com.auto_catalog.auto__catalog.api.dto.CarDto;
 import com.auto_catalog.auto__catalog.api.services.CarService;
 import com.auto_catalog.auto__catalog.store.entity.Car;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -41,16 +42,15 @@ public class CarController {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @PostMapping
-    public ResponseEntity<Car> createCar(@RequestBody Car car) {
-        Car createdCar = carService.createCar(car);
+    public ResponseEntity<CarDto> createCar(@RequestBody CarDto carDto) {
+        CarDto createdCar = carService.createCar(carDto);
         return new ResponseEntity<>(createdCar, HttpStatus.CREATED);
     }
+
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<HttpStatus> updateCar(@PathVariable Long id, @RequestBody Car car) {
-        return new ResponseEntity<>(carService.updateCar(car) ? HttpStatus.NO_CONTENT :
-                HttpStatus.CONFLICT);
-
+    public ResponseEntity<HttpStatus> updateCar(@PathVariable Long id, @RequestBody CarDto carDto) {
+        return new ResponseEntity<>(carService.updateCar(carDto) ? HttpStatus.NO_CONTENT : HttpStatus.CONFLICT);
     }
 
     @PreAuthorize("hasRole('ADMIN')")

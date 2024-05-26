@@ -1,7 +1,5 @@
 package com.auto_catalog.auto__catalog.api.dto;
 
-import com.auto_catalog.auto__catalog.store.entity.BodyType;
-import com.auto_catalog.auto__catalog.store.entity.ModelCar;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,9 +12,9 @@ import lombok.NoArgsConstructor;
 public class CarDto {
     private Long carId;
 
-    private ModelCar modelCar;
+    private String modelName;
 
-    private BodyType bodyType;
+    private String bodyTypeName;
 
     private Integer year;
 
