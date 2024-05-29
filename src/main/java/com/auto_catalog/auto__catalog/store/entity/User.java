@@ -1,9 +1,11 @@
 package com.auto_catalog.auto__catalog.store.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.Formula;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -22,9 +24,6 @@ public class User {
     @SequenceGenerator(name="project_seq",sequenceName="project_seq", allocationSize=1)
     private Long userId;
 
-    /*@Column(name = "login", unique = true, nullable = false)
-    private String login;*/
-
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
@@ -37,12 +36,22 @@ public class User {
    /* @Column(name = "password", nullable = false)
     private String password;*/
 
-   @Formula("(select count(l.listing_id) from listings l where l.user_id = user_id)")
-   @Column(name = "listing_count")
-   private int listingCount;
-
-    @OneToMany(mappedBy = "user")
-    @Column(name = "listings")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Listing> listings;
 
+    @Column(name = "listing_count")
+    private Integer listingCount = 0;
+
+    public void incrementListingCount() {
+        if (this.listingCount == null) {
+            this.listingCount = 0;
+        }
+        this.listingCount++;
+    }
+
+    public void decrementListingCount() {
+        if (this.listingCount != null && this.listingCount > 0) {
+            this.listingCount--;
+        }
+    }
 }

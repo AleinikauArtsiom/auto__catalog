@@ -32,7 +32,7 @@ public class UserSecRegistrationDto {
 
 
     @NotNull
-    @Pattern(regexp = "^.*@.*[a-zA-Z].*$", message = "Invalid email format")
+/*    @Pattern(regexp = "^.*@.*[a-zA-Z].*$"*//*, message = "Invalid email format"*//*)*/ //TODO: ИСПРАВИТЬ
     private String email;
 
 

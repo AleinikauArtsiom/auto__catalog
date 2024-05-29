@@ -6,19 +6,17 @@ import com.auto_catalog.auto__catalog.api.exception.NotFoundException;
 import com.auto_catalog.auto__catalog.api.security.entity.UserSecurity;
 import com.auto_catalog.auto__catalog.api.security.repository.UserSecurityRepository;
 import com.auto_catalog.auto__catalog.store.entity.User;
+import com.auto_catalog.auto__catalog.store.repository.ListingRepository;
 import com.auto_catalog.auto__catalog.store.repository.UserRepository;
 import jakarta.validation.Valid;
-import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
 public class UserService {
     private final UserRepository userRepository;
-
     private final UserDtoFactory userDtoFactory;
     private final UserSecurityRepository userSecurityRepository;
 
@@ -42,8 +40,6 @@ public class UserService {
     }
 
 
-
-
     public User getUserById(Long user_id) {
         return getUserOrThrowException(user_id);
     }
@@ -64,7 +60,6 @@ public class UserService {
 
         User user = userRepository.saveAndFlush(
                 User.builder()
-                        //.login(userDto.getLogin())
                         .firstName(userDto.getFirstName())
                         .lastName(userDto.getLastName())
                         .email(userDto.getEmail())
@@ -89,13 +84,12 @@ public class UserService {
             }
             /*if(user.getPassword()!= null){
                 userFromDB.setPassword(user.getPassword());
-            }
-            if(user.getLogin()!= null){
-                userFromDB.setLogin(user.getLogin());
             }*/
+
             User updateUser = userRepository.saveAndFlush(userFromDB);
             return userFromDB.equals(updateUser);
         }
         return false;
     }
+
 }

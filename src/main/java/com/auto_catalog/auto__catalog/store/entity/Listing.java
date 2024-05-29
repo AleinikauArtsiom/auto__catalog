@@ -1,5 +1,6 @@
 package com.auto_catalog.auto__catalog.store.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -50,6 +51,5 @@ public class Listing {
 
     @Column(name = "status", nullable = false)
     private String status;
-
 
 }

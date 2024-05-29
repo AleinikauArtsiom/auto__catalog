@@ -37,9 +37,4 @@ public class UserDto {
     /*@NotNull
     private String password;*/
 
-   /* @NotNull
-    private Integer listingCount;
-
-    @NotNull
-    private List<Long> listingIds;*/
 }

@@ -1,6 +1,7 @@
 package com.auto_catalog.auto__catalog.api.security.service;
 
 import com.auto_catalog.auto__catalog.api.exception.SameUserInDataBase;
+import com.auto_catalog.auto__catalog.api.exception.UserReqEmailException;
 import com.auto_catalog.auto__catalog.api.security.entity.Roles;
 import com.auto_catalog.auto__catalog.api.security.entity.UserSecurity;
 import com.auto_catalog.auto__catalog.api.security.entity.dto.AuthRequestDto;
@@ -35,6 +36,10 @@ public class UserSecurityService {
         Optional<UserSecurity> security = userSecurityRepository.findByUserLogin(userSecRegistrationDto.getLogin());
         if(security.isPresent()){
             throw new SameUserInDataBase(userSecRegistrationDto.getLogin());
+        }
+        Optional<User> existingUser = userRepository.findByEmail(userSecRegistrationDto.getEmail());
+        if (existingUser.isPresent()) {
+            throw new UserReqEmailException(userSecRegistrationDto.getEmail());
         }
 
         User user = new User();

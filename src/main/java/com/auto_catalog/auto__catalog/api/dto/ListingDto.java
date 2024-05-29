@@ -4,7 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.sql.Timestamp;
-
+@Setter
+@Getter
 @Data
 @Builder
 @AllArgsConstructor

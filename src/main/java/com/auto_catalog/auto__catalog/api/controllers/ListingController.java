@@ -51,8 +51,8 @@ public class ListingController {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @PutMapping("/{id}")
-    public ResponseEntity<HttpStatus> updateListing(@PathVariable Long id, @RequestBody Listing listing) {
-        return new ResponseEntity<>(listingService.updateListing(listing) ? HttpStatus.NO_CONTENT : HttpStatus.CONFLICT);
+    public ResponseEntity<HttpStatus> updateListing(@PathVariable Long id, @RequestBody ListingDto listingDto) {
+        return new ResponseEntity<>(listingService.updateListing(listingDto) ? HttpStatus.NO_CONTENT : HttpStatus.CONFLICT);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")

@@ -29,6 +29,12 @@ public class ExceptionHandlerGlobal {
         return new ResponseEntity<>(HttpStatus.valueOf(409));
     }
 
+    @ExceptionHandler(value = {UserReqEmailException.class})
+    public ResponseEntity<HttpStatusCode> UserReqEmailException(Exception exception){
+        log.error(String.valueOf(exception));
+        return new ResponseEntity<>(HttpStatus.valueOf(409));
+    }
+
     @ExceptionHandler(value = {ClassCastException.class})
     public ResponseEntity<String> classCastException(ClassCastException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);

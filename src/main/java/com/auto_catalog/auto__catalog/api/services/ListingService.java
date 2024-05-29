@@ -49,8 +49,12 @@ public class ListingService {
     }
 
     public void deleteListingById(Long id) {
-        getListingOrThrowException(id);
+        Listing listing = getListingOrThrowException(id);
+        User user = listing.getUser();
+        user.getListings().remove(listing);
+        user.decrementListingCount();
         listingRepository.deleteById(id);
+        userRepository.save(user);
     }
 
     private Listing getListingOrThrowException(Long id) {
@@ -90,34 +94,58 @@ public class ListingService {
                 .updatedAt(Timestamp.valueOf(LocalDateTime.now()))
                 .build();
 
+        user.getListings().add(listing);
+        user.incrementListingCount();
         listingRepository.save(listing);
+        userRepository.save(user);
+
         return listingDtoFactory.makeListingDto(listing);
     }
 
-    public boolean updateListing(Listing listing) {
-        Optional<Listing> listingFromDBOptional = listingRepository.findById(listing.getListingId());
+
+    public boolean updateListing(ListingDto listingDto) {
+        Optional<Listing> listingFromDBOptional = listingRepository.findById(listingDto.getListingId());
         if (listingFromDBOptional.isPresent()) {
             Listing listingFromDB = listingFromDBOptional.get();
-            if (listing.getBodyName() != null) {
-                listingFromDB.setBodyName(listing.getBodyName());
+
+            if (listingDto.getBodyName() != null) {
+                listingFromDB.setBodyName(listingDto.getBodyName());
             }
-            if (listing.getModelName() != null) {
-                listingFromDB.setModelName(listing.getModelName());
+            if (listingDto.getYear() != null) {
+                listingFromDB.getCar().setYear(listingDto.getYear());
             }
-            if (listing.getBrandName() != null) {
-                listingFromDB.setBrandName(listing.getBrandName());
+            if (listingDto.getMileage() != null) {
+                listingFromDB.getCar().setMileage(listingDto.getMileage());
             }
-            if (listing.getTitle() != null) {
-                listingFromDB.setTitle(listing.getTitle());
+            if (listingDto.getPrice() != null) {
+                listingFromDB.getCar().setPrice(listingDto.getPrice());
             }
-            if (listing.getDescription() != null) {
-                listingFromDB.setDescription(listing.getDescription());
+            if (listingDto.getCondition() != null) {
+                listingFromDB.getCar().setCondition(listingDto.getCondition());
             }
+            if (listingDto.getModelName() != null) {
+                listingFromDB.setModelName(listingDto.getModelName());
+            }
+            if (listingDto.getBrandName() != null) {
+                listingFromDB.setBrandName(listingDto.getBrandName());
+            }
+            if (listingDto.getTitle() != null) {
+                listingFromDB.setTitle(listingDto.getTitle());
+            }
+            if (listingDto.getDescription() != null) {
+                listingFromDB.setDescription(listingDto.getDescription());
+            }
+            if (listingDto.getStatus() != null) {
+                listingFromDB.setStatus(listingDto.getStatus());
+            }
+
             listingFromDB.setUpdatedAt(Timestamp.valueOf(LocalDateTime.now()));
+
             Listing updatedListing = listingRepository.saveAndFlush(listingFromDB);
 
             return listingFromDB.equals(updatedListing);
+        } else {
+            throw new NotFoundException("Listing with ID " + listingDto.getListingId() + " not found");
         }
-        return false;
     }
 }
