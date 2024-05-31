@@ -14,6 +14,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ListingService {
@@ -40,31 +41,41 @@ public class ListingService {
         this.userRepository = userRepository;
     }
 
-    public List<Listing> getAllListings() {
-        return listingRepository.findAll();
+    public List<ListingDto> getAllListings() {
+        return listingRepository.findAll()
+                .stream()
+                .map(listingDtoFactory::makeListingDto)
+                .collect(Collectors.toList());
     }
 
-    public Listing getListingById(Long id) {
+    public ListingDto getListingById(Long id) {
         return getListingOrThrowException(id);
     }
 
     public void deleteListingById(Long id) {
-        Listing listing = getListingOrThrowException(id);
+        Listing listing = getListingOrThrowExceptionEntity(id);
         User user = listing.getUser();
         user.getListings().remove(listing);
         user.decrementListingCount();
         listingRepository.deleteById(id);
         userRepository.save(user);
+        carRepository.delete(listing.getCar());
     }
 
-    private Listing getListingOrThrowException(Long id) {
+    private ListingDto getListingOrThrowException(Long id) {
+        Listing listing = getListingOrThrowExceptionEntity(id);
+        return listingDtoFactory.makeListingDto(listing);
+    }
+
+    private Listing getListingOrThrowExceptionEntity(Long id) {
         return listingRepository
                 .findById(id)
                 .orElseThrow(() -> new NotFoundException("Listing with ID " + id + " not found"));
     }
 
+
     public ListingDto createListing(@Valid ListingDto listingDto, Principal principal) {
-        // Fetch or create the necessary entities
+
         BodyType bodyType = bodyTypeRepository.findByName(listingDto.getBodyName())
                 .orElseGet(() -> bodyTypeRepository.save(new BodyType(null, listingDto.getBodyName())));
 
@@ -77,7 +88,6 @@ public class ListingService {
         Car car = carRepository.save(new Car(null, modelCar, bodyType, listingDto.getYear(),
                 listingDto.getMileage(), listingDto.getPrice(), listingDto.getCondition()));
 
-        // Fetch the user
         User user = userRepository.findByUserLogin(principal.getName())
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
@@ -107,9 +117,20 @@ public class ListingService {
         Optional<Listing> listingFromDBOptional = listingRepository.findById(listingDto.getListingId());
         if (listingFromDBOptional.isPresent()) {
             Listing listingFromDB = listingFromDBOptional.get();
-
             if (listingDto.getBodyName() != null) {
-                listingFromDB.setBodyName(listingDto.getBodyName());
+                BodyType newBodyType = bodyTypeRepository.findByName(listingDto.getBodyName())
+                        .orElseGet(() -> bodyTypeRepository.save(new BodyType(null, listingDto.getBodyName())));
+                listingFromDB.getCar().setBodyType(newBodyType);
+            }
+            if (listingDto.getModelName() != null) {
+                ModelCar newModelCar = modelCarRepository.findByName(listingDto.getModelName())
+                        .orElseGet(() -> modelCarRepository.save(new ModelCar(null, listingFromDB.getCar().getModelCar().getBrand(), listingDto.getModelName())));
+                listingFromDB.getCar().setModelCar(newModelCar);
+            }
+            if (listingDto.getBrandName() != null) {
+                Brand newBrand = brandRepository.findByName(listingDto.getBrandName())
+                        .orElseGet(() -> brandRepository.save(new Brand(null, listingDto.getBrandName())));
+                listingFromDB.getCar().getModelCar().setBrand(newBrand);
             }
             if (listingDto.getYear() != null) {
                 listingFromDB.getCar().setYear(listingDto.getYear());
@@ -123,12 +144,7 @@ public class ListingService {
             if (listingDto.getCondition() != null) {
                 listingFromDB.getCar().setCondition(listingDto.getCondition());
             }
-            if (listingDto.getModelName() != null) {
-                listingFromDB.setModelName(listingDto.getModelName());
-            }
-            if (listingDto.getBrandName() != null) {
-                listingFromDB.setBrandName(listingDto.getBrandName());
-            }
+
             if (listingDto.getTitle() != null) {
                 listingFromDB.setTitle(listingDto.getTitle());
             }

@@ -28,19 +28,19 @@ public class CarController {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping
-    public ResponseEntity<List<Car>> getAllCars() {
-        List<Car> cars = carService.getAllCars();
+    public ResponseEntity<List<CarDto>> getAllCars() {
+        List<CarDto> cars = carService.getAllCars();
         return new ResponseEntity<>(cars, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/{id}")
-    public ResponseEntity<Car> getCarById(@PathVariable Long id) {
-        Car car = carService.getCarById(id);
+    public ResponseEntity<CarDto> getCarById(@PathVariable Long id) {
+        CarDto car = carService.getCarById(id);
         return new ResponseEntity<>(car, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<CarDto> createCar(@RequestBody CarDto carDto) {
         CarDto createdCar = carService.createCar(carDto);

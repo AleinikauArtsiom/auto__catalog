@@ -21,8 +21,8 @@ public class UserDto {
     @Id
     private Long userId;
 
-    @NotNull
-    private String login;
+   /* @NotNull
+    private String login;*/
 
     @NotNull
     private String firstName;

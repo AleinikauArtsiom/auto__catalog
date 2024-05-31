@@ -1,9 +1,11 @@
 package com.auto_catalog.auto__catalog.api.services;
 
+import com.auto_catalog.auto__catalog.api.dto.ListingDto;
 import com.auto_catalog.auto__catalog.api.dto.ModelCarDto;
 import com.auto_catalog.auto__catalog.api.dtoFactories.ModelCarDtoFactory;
 import com.auto_catalog.auto__catalog.api.exception.NotFoundException;
 import com.auto_catalog.auto__catalog.store.entity.Brand;
+import com.auto_catalog.auto__catalog.store.entity.Listing;
 import com.auto_catalog.auto__catalog.store.entity.ModelCar;
 import com.auto_catalog.auto__catalog.store.repository.BrandRepository;
 import com.auto_catalog.auto__catalog.store.repository.ModelCarRepository;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ModelCarService {
@@ -29,8 +32,11 @@ public class ModelCarService {
 
     }
 
-    public List<ModelCar> getAllModelCars() {
-        return modelCarRepository.findAll();
+    public List<ModelCarDto> getAllModelCars() {
+        return modelCarRepository.findAll()
+                .stream()
+                .map(modelCarDtoFactory::makeModelCarDtoFactory)
+                .collect(Collectors.toList());
     }
 
     public void deleteModelCarById(Long id) {
@@ -38,13 +44,18 @@ public class ModelCarService {
         modelCarRepository.deleteById(id);
     }
 
-    private ModelCar getModelCarOrThrowException(Long id) {
-        return modelCarRepository
-                .findById(id)
-                .orElseThrow(() -> new NotFoundException("ModelCar with " + id + " doesn't exist"));
+    private ModelCarDto getModelCarOrThrowException(Long id) {
+        ModelCar modelCar = getModelCarOrThrowExceptionEntity(id);
+        return modelCarDtoFactory.makeModelCarDtoFactory(modelCar);
     }
 
-    public ModelCar getModelCarById(Long id) {
+    private ModelCar getModelCarOrThrowExceptionEntity(Long id) {
+        return modelCarRepository
+                .findById(id)
+                .orElseThrow(() -> new NotFoundException("Model->car with ID " + id + " not found"));
+    }
+
+    public ModelCarDto getModelCarById(Long id) {
         return getModelCarOrThrowException(id);
     }
 

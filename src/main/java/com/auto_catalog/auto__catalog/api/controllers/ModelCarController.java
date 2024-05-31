@@ -29,15 +29,15 @@ public class ModelCarController {
 
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @GetMapping
-    public ResponseEntity<List<ModelCar>> getAllModelCars() {
-        List<ModelCar> modelCars = modelCarService.getAllModelCars();
+    public ResponseEntity<List<ModelCarDto>> getAllModelCars() {
+        List<ModelCarDto> modelCars = modelCarService.getAllModelCars();
         return ResponseEntity.ok(modelCars);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @GetMapping("/{id}")
-    public ResponseEntity<ModelCar> getModelCarById(@PathVariable Long id) {
-        ModelCar modelCar = modelCarService.getModelCarById(id);
+    public ResponseEntity<ModelCarDto> getModelCarById(@PathVariable Long id) {
+        ModelCarDto modelCar = modelCarService.getModelCarById(id);
         if (modelCar != null) {
             return ResponseEntity.ok(modelCar);
         } else {

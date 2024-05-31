@@ -5,6 +5,7 @@ import com.auto_catalog.auto__catalog.api.dtoFactories.CarDtoFactory;
 import com.auto_catalog.auto__catalog.api.exception.NotFoundException;
 import com.auto_catalog.auto__catalog.store.entity.BodyType;
 import com.auto_catalog.auto__catalog.store.entity.Car;
+import com.auto_catalog.auto__catalog.store.entity.Listing;
 import com.auto_catalog.auto__catalog.store.entity.ModelCar;
 import com.auto_catalog.auto__catalog.store.repository.BodyTypeRepository;
 import com.auto_catalog.auto__catalog.store.repository.CarRepository;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CarService {
@@ -31,18 +33,32 @@ public class CarService {
         this.carDtoFactory = carDtoFactory;
     }
 
-    public List<Car> getAllCars() {
-        return carRepository.findAll();
+    public List<CarDto> getAllCars() {
+        return carRepository.findAll()
+                .stream()
+                .map(carDtoFactory::makeCarDto)
+                .collect(Collectors.toList());
     }
 
-    public Car getCarById(Long id) {
-        return carRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Car with ID " + id + " not found"));
+    public CarDto getCarById(Long id) {
+       return getCarOrThrowException(id);
     }
 
     public void deleteCarById(Long id) {
-        carRepository.deleteById(id);
+        getCarOrThrowException(id);
+       carRepository.deleteById(id);
     }
+
+    private CarDto getCarOrThrowException(Long id) {
+        Car car = getCarOrThrowExceptionEntity(id);
+        return carDtoFactory.makeCarDto(car);
+    }
+    private Car getCarOrThrowExceptionEntity(Long id) {
+        return carRepository
+                .findById(id)
+                .orElseThrow(() -> new NotFoundException("Car with ID " + id + " not found"));
+    }
+
 
     public CarDto createCar(CarDto carDto) {
         ModelCar modelCar = modelCarRepository.findByName(carDto.getModelName())

@@ -1,6 +1,7 @@
 package com.auto_catalog.auto__catalog.api.controllers;
 
 import com.auto_catalog.auto__catalog.api.dto.ListingDto;
+import com.auto_catalog.auto__catalog.api.dtoFactories.ListingDtoFactory;
 import com.auto_catalog.auto__catalog.api.services.ListingService;
 import com.auto_catalog.auto__catalog.store.entity.Listing;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -30,15 +31,15 @@ public class ListingController {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping
-    public ResponseEntity<List<Listing>> getAllListings() {
-        List<Listing> listings = listingService.getAllListings();
+    public ResponseEntity<List<ListingDto>> getAllListings() {
+        List<ListingDto> listings = listingService.getAllListings();
         return new ResponseEntity<>(listings, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/{id}")
-    public ResponseEntity<Listing> getListingById(@PathVariable Long id) {
-        Listing listing = listingService.getListingById(id);
+    public ResponseEntity<ListingDto> getListingById(@PathVariable Long id) {
+        ListingDto listing = listingService.getListingById(id);
         return new ResponseEntity<>(listing, HttpStatus.OK);
     }
 
@@ -52,6 +53,7 @@ public class ListingController {
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @PutMapping("/{id}")
     public ResponseEntity<HttpStatus> updateListing(@PathVariable Long id, @RequestBody ListingDto listingDto) {
+        listingDto.setListingId(id);
         return new ResponseEntity<>(listingService.updateListing(listingDto) ? HttpStatus.NO_CONTENT : HttpStatus.CONFLICT);
     }
 

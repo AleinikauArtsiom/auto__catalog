@@ -23,6 +23,12 @@ public class ExceptionHandlerGlobal {
         return new ResponseEntity<>(HttpStatus.valueOf(401));
     }
 
+   /* @ExceptionHandler(value = {DeleteNotFoundException.class})
+    public ResponseEntity<HttpStatusCode> deleteNotFoundException(Exception exception){
+        log.error("Username not found: " + exception);
+        return new ResponseEntity<>(HttpStatus.valueOf(401));
+    }*/
+
     @ExceptionHandler(value = {SameUserInDataBase.class})
     public ResponseEntity<HttpStatusCode> SameUserInDataBase(Exception exception){
         log.error(String.valueOf(exception));
@@ -33,6 +39,12 @@ public class ExceptionHandlerGlobal {
     public ResponseEntity<HttpStatusCode> UserReqEmailException(Exception exception){
         log.error(String.valueOf(exception));
         return new ResponseEntity<>(HttpStatus.valueOf(409));
+    }
+
+    @ExceptionHandler(value = {NotFoundException.class})
+    public ResponseEntity<HttpStatusCode> NotFoundException(Exception exception){
+        log.error(String.valueOf(exception));
+        return new ResponseEntity<>(HttpStatus.valueOf(404));
     }
 
     @ExceptionHandler(value = {ClassCastException.class})

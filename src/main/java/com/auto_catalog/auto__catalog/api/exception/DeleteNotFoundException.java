@@ -1,15 +1,13 @@
 package com.auto_catalog.auto__catalog.api.exception;
 
-public class UserReqEmailException extends RuntimeException {
-
+public class DeleteNotFoundException extends RuntimeException  {
     private final String message;
 
-    public UserReqEmailException(String message){
+    public DeleteNotFoundException(String message){
         this.message = message;
     }
     @Override
     public String toString() {
-        return " We already have user with email:  " + message ;
+        return " Content not found " + message;
     }
 }
-

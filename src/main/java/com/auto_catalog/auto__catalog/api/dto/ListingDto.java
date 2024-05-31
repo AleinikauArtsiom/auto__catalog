@@ -1,9 +1,13 @@
 package com.auto_catalog.auto__catalog.api.dto;
 
+import com.auto_catalog.auto__catalog.store.entity.Listing;
+import com.auto_catalog.auto__catalog.store.entity.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.util.List;
+
 @Setter
 @Getter
 @Data
@@ -39,4 +43,5 @@ public class ListingDto {
     private Timestamp updatedAt;
 
     private String status;
+
 }

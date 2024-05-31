@@ -35,13 +35,14 @@ public class UserController {
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
+
     }
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @GetMapping("/info")
     public ResponseEntity<User> getInfoAboutCurrentUser(Principal principal){
         Optional<User> result = userService.getInfoAboutCurrentUser(principal.getName());
         if (result.isEmpty()){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>( HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(result.get(), HttpStatus.OK);
     }
@@ -63,8 +64,8 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     @SneakyThrows
     @PutMapping("/{user_id}")
-    public ResponseEntity<HttpStatus> updateUser(@PathVariable Long user_id, @RequestBody User user) {
-        return new ResponseEntity<>(userService.updateUser(user) ? HttpStatus.NO_CONTENT :
+    public ResponseEntity<HttpStatus> updateUser(@PathVariable Long user_id, @RequestBody UserDto userDto) {
+        return new ResponseEntity<>(userService.updateUser(userDto) ? HttpStatus.NO_CONTENT :
                 HttpStatus.CONFLICT);
     }
     @PreAuthorize("hasRole('ADMIN')")

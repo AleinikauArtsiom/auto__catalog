@@ -1,5 +1,7 @@
 package com.auto_catalog.auto__catalog.store.entity;
 
+import com.auto_catalog.auto__catalog.api.dto.UserDto;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -37,6 +39,7 @@ public class User {
     private String password;*/
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Listing> listings;
 
     @Column(name = "listing_count")
