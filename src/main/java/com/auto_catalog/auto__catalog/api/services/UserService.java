@@ -1,6 +1,7 @@
 package com.auto_catalog.auto__catalog.api.services;
 
 import com.auto_catalog.auto__catalog.api.dto.UserDto;
+import com.auto_catalog.auto__catalog.api.dto.UserDtoUpdate;
 import com.auto_catalog.auto__catalog.api.dtoFactories.UserDtoFactory;
 import com.auto_catalog.auto__catalog.api.exception.NotFoundException;
 import com.auto_catalog.auto__catalog.api.exception.UserReqEmailException;
@@ -11,6 +12,8 @@ import com.auto_catalog.auto__catalog.store.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,14 +34,14 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public Optional<User> getInfoAboutCurrentUser(String email) {
+    public Optional<UserDto> getInfoAboutCurrentUser(String email) {
         Optional<UserSecurity> userSecurity = userSecurityRepository.findByUserLogin(email);
         if (userSecurity.isEmpty()) {
             return Optional.empty();
         }
-        return userRepository.findById(userSecurity.get().getUser().getUserId());
+        User user = userSecurity.get().getUser();
+        return Optional.of(userDtoFactory.makeUserDto(user));
     }
-
 
     public User getUserById(Long user_id) {
         return getUserOrThrowException(user_id);
@@ -55,49 +58,56 @@ public class UserService {
         userRepository.deleteById(user_id);
     }
 
+    public void deleteSelf(Principal principal) {
+        User user = userSecurityRepository.findByUserLogin(principal.getName())
+                .map(UserSecurity::getUser)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        userRepository.delete(user);
+    }
 
-    public UserDto createUser(@Valid UserDto userDto) {
-
+    public UserDtoUpdate createUser(@Valid UserDtoUpdate userDtoUpdate) {
         User user = userRepository.saveAndFlush(
                 User.builder()
-                        .firstName(userDto.getFirstName())
-                        .lastName(userDto.getLastName())
-                        .email(userDto.getEmail())
+                        .firstName(userDtoUpdate.getFirstName())
+                        .lastName(userDtoUpdate.getLastName())
+                        .email(userDtoUpdate.getEmail())
                         // .password(userDto.getPassword())
                         .build()
         );
 
-        return userDtoFactory.makeUserDto(user);
+        return userDtoFactory.makeUserDtoUpdate(user);
     }
-    public boolean updateUser(UserDto userDto){
-        User userFromDB = userRepository.findById(userDto.getUserId())
-                .orElseThrow(() -> new NotFoundException("User with ID " + userDto.getUserId() + " doesn't exist"));
 
-        if (userDto.getEmail() != null && !userDto.getEmail().equals(userFromDB.getEmail())) {
-            userRepository.findByEmail(userDto.getEmail()).ifPresent(existingUser -> {
-                throw new UserReqEmailException(userDto.getEmail());
+    public boolean updateUser(UserDtoUpdate userDtoUpdate) {
+        User userFromDB = userRepository.findById(userDtoUpdate.getUserId())
+                .orElseThrow(() -> new NotFoundException("User with ID " + userDtoUpdate.getUserId() + " doesn't exist"));
+
+        if (userDtoUpdate.getEmail() != null && !userDtoUpdate.getEmail().equals(userFromDB.getEmail())) {
+            userRepository.findByEmail(userDtoUpdate.getEmail()).ifPresent(existingUser -> {
+                throw new UserReqEmailException(userDtoUpdate.getEmail());
             });
         }
         boolean updated = false;
 
-        if(userDto.getFirstName() != null){
-            userFromDB.setFirstName(userDto.getFirstName());
+        if (userDtoUpdate.getFirstName() != null) {
+            userFromDB.setFirstName(userDtoUpdate.getFirstName());
             updated = true;
         }
-        if(userDto.getLastName() != null){
-            userFromDB.setLastName(userDto.getLastName());
+        if (userDtoUpdate.getLastName() != null) {
+            userFromDB.setLastName(userDtoUpdate.getLastName());
             updated = true;
         }
-        if(userDto.getEmail() != null){
-            userFromDB.setEmail(userDto.getEmail());
+        if (userDtoUpdate.getEmail() != null) {
+            userFromDB.setEmail(userDtoUpdate.getEmail());
             updated = true;
         }
-    /*
-    if(userDto.getPassword() != null){
-        userFromDB.setPassword(userDto.getPassword());
-        updated = true;
-    }
-    */
+
+        /*
+        if(userDto.getPassword() != null){
+            userFromDB.setPassword(userDto.getPassword());
+            updated = true;
+        }
+        */
 
         if (updated) {
             userRepository.saveAndFlush(userFromDB);
@@ -106,4 +116,42 @@ public class UserService {
         return updated;
     }
 
+    public boolean updateSelf(UserDtoUpdate userDtoUpdate, Principal principal) {
+        User userFromDB = userSecurityRepository.findByUserLogin(principal.getName())
+                .map(UserSecurity::getUser)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+
+        if (userDtoUpdate.getEmail() != null && !userDtoUpdate.getEmail().equals(userFromDB.getEmail())) {
+            userRepository.findByEmail(userDtoUpdate.getEmail()).ifPresent(existingUser -> {
+                throw new UserReqEmailException(userDtoUpdate.getEmail());
+            });
+        }
+        boolean updated = false;
+
+        if (userDtoUpdate.getFirstName() != null) {
+            userFromDB.setFirstName(userDtoUpdate.getFirstName());
+            updated = true;
+        }
+        if (userDtoUpdate.getLastName() != null) {
+            userFromDB.setLastName(userDtoUpdate.getLastName());
+            updated = true;
+        }
+        if (userDtoUpdate.getEmail() != null) {
+            userFromDB.setEmail(userDtoUpdate.getEmail());
+            updated = true;
+        }
+
+        /*
+        if(userDto.getPassword() != null){
+            userFromDB.setPassword(userDto.getPassword());
+            updated = true;
+        }
+        */
+
+        if (updated) {
+            userRepository.saveAndFlush(userFromDB);
+        }
+
+        return updated;
+    }
 }

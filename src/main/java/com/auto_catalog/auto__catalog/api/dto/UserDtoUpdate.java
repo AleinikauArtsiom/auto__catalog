@@ -1,14 +1,8 @@
 package com.auto_catalog.auto__catalog.api.dto;
 
-
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Data
 @Setter
@@ -16,12 +10,9 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDto {
+public class UserDtoUpdate {
     @Id
     private Long userId;
-
-   /* @NotNull
-    private String login;*/
 
     @NotNull
     private String firstName;
@@ -32,11 +23,6 @@ public class UserDto {
     @NotNull
     //@Pattern(regexp = "^.*@.*[a-zA-Z].*$", message = "Invalid email format")
     private String email;
-    private Integer listingCount;
-    private List<ListingDto> listings;
-
-
-    /*@NotNull
-    private String password;*/
 
 }
+

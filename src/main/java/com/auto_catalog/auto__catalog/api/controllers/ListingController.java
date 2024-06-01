@@ -1,9 +1,7 @@
 package com.auto_catalog.auto__catalog.api.controllers;
 
 import com.auto_catalog.auto__catalog.api.dto.ListingDto;
-import com.auto_catalog.auto__catalog.api.dtoFactories.ListingDtoFactory;
 import com.auto_catalog.auto__catalog.api.services.ListingService;
-import com.auto_catalog.auto__catalog.store.entity.Listing;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -52,15 +50,36 @@ public class ListingController {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @PutMapping("/{id}")
-    public ResponseEntity<HttpStatus> updateListing(@PathVariable Long id, @RequestBody ListingDto listingDto) {
+    public ResponseEntity<HttpStatus> updateListing(@PathVariable Long id, @RequestBody ListingDto listingDto, Principal principal) {
         listingDto.setListingId(id);
-        return new ResponseEntity<>(listingService.updateListing(listingDto) ? HttpStatus.NO_CONTENT : HttpStatus.CONFLICT);
+        return new ResponseEntity<>(listingService.updateListing(listingDto, principal) ? HttpStatus.NO_CONTENT : HttpStatus.CONFLICT);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/admin/{id}")
+    public ResponseEntity<HttpStatus> updateListingForAdmin(@PathVariable Long id, @RequestBody ListingDto listingDto) {
+        listingDto.setListingId(id);
+        return new ResponseEntity<>(listingService.updateListingForAdmin(listingDto) ? HttpStatus.NO_CONTENT : HttpStatus.CONFLICT);
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @GetMapping("/my-listings")
+    public ResponseEntity<List<ListingDto>> getMyListings(Principal principal) {
+        List<ListingDto> listings = listingService.getListingsByCurrentUser(principal.getName());
+        return new ResponseEntity<>(listings, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteListingById(@PathVariable Long id) {
-        listingService.deleteListingById(id);
+    public ResponseEntity<String> deleteListingById(@PathVariable Long id, Principal principal) {
+        listingService.deleteListingById(id, principal);
+        return new ResponseEntity<>("Listing deleted successfully", HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/admin/{id}")
+    public ResponseEntity<String> deleteListingByIdForAdmin(@PathVariable Long id) {
+        listingService.deleteListingByIdForAdmin(id);
         return new ResponseEntity<>("Listing deleted successfully", HttpStatus.OK);
     }
 }
