@@ -1,5 +1,6 @@
 package com.auto_catalog.auto__catalog.api.security.service;
 
+import com.auto_catalog.auto__catalog.api.exception.NotFoundException;
 import com.auto_catalog.auto__catalog.api.exception.SameUserInDataBase;
 import com.auto_catalog.auto__catalog.api.exception.UserReqEmailException;
 import com.auto_catalog.auto__catalog.api.security.entity.Roles;
@@ -69,13 +70,20 @@ public class UserSecurityService {
 
     @Transactional
     public void promoteUserToAdmin(Long id) {
-        // Поиск пользователя по ID
         UserSecurity user = userSecurityRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("No user found with ID " + id));
-        // Смена роли на ADMIN
         user.setRole(Roles.valueOf("ADMIN"));
         userSecurityRepository.save(user);
         System.out.println("Role of user with ID " + id + " has been changed to ADMIN");
 
     }
+
+    @Transactional
+    public void blockUserById(Long id) {
+        UserSecurity userSecurity = userSecurityRepository.findByUser_UserId(id)
+                .orElseThrow(() -> new NotFoundException("UserSecurity not found"));
+        userSecurity.setIsBlocked(true);
+        userSecurityRepository.save(userSecurity);
+    }
+
 }

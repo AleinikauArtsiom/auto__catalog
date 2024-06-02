@@ -7,7 +7,11 @@ import com.auto_catalog.auto__catalog.api.exception.NotFoundException;
 import com.auto_catalog.auto__catalog.api.exception.UserReqEmailException;
 import com.auto_catalog.auto__catalog.api.security.entity.UserSecurity;
 import com.auto_catalog.auto__catalog.api.security.repository.UserSecurityRepository;
+import com.auto_catalog.auto__catalog.store.entity.Car;
+import com.auto_catalog.auto__catalog.store.entity.Listing;
 import com.auto_catalog.auto__catalog.store.entity.User;
+import com.auto_catalog.auto__catalog.store.repository.CarRepository;
+import com.auto_catalog.auto__catalog.store.repository.ListingRepository;
 import com.auto_catalog.auto__catalog.store.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +24,18 @@ import java.util.Optional;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final ListingRepository listingRepository;
+    private final CarRepository carRepository;
     private final UserDtoFactory userDtoFactory;
     private final UserSecurityRepository userSecurityRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, UserDtoFactory userDtoFactory, UserSecurityRepository userSecurityRepository) {
+    public UserService(UserRepository userRepository, ListingRepository listingRepository,
+                       CarRepository carRepository, UserDtoFactory userDtoFactory,
+                       UserSecurityRepository userSecurityRepository) {
         this.userRepository = userRepository;
+        this.listingRepository = listingRepository;
+        this.carRepository = carRepository;
         this.userDtoFactory = userDtoFactory;
         this.userSecurityRepository = userSecurityRepository;
     }
@@ -54,7 +64,9 @@ public class UserService {
     }
 
     public void deleteUserById(Long user_id) {
-        getUserOrThrowException(user_id);
+        User user = getUserOrThrowException(user_id);
+        deleteAssociatedListingsAndCars(user);
+        deleteUserSecurity(user);
         userRepository.deleteById(user_id);
     }
 
@@ -62,7 +74,25 @@ public class UserService {
         User user = userSecurityRepository.findByUserLogin(principal.getName())
                 .map(UserSecurity::getUser)
                 .orElseThrow(() -> new NotFoundException("User not found"));
+        deleteAssociatedListingsAndCars(user);
+        deleteUserSecurity(user);
         userRepository.delete(user);
+    }
+
+    private void deleteAssociatedListingsAndCars(User user) {
+        List<Listing> listings = listingRepository.findByUser(user);
+        for (Listing listing : listings) {
+            Car car = listing.getCar();
+            listingRepository.delete(listing);
+            carRepository.delete(car);
+        }
+    }
+
+    private void deleteUserSecurity(User user) {
+        List<UserSecurity> userSecurities = userSecurityRepository.findByUser(user);
+        for (UserSecurity userSecurity : userSecurities) {
+            userSecurityRepository.delete(userSecurity);
+        }
     }
 
     public UserDtoUpdate createUser(@Valid UserDtoUpdate userDtoUpdate) {

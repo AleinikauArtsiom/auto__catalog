@@ -6,16 +6,15 @@ import com.auto_catalog.auto__catalog.api.security.entity.dto.UserSecRegistratio
 import com.auto_catalog.auto__catalog.api.security.service.UserSecurityService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.BeanDefinitionDsl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.RecursiveTask;
 import java.util.stream.Collectors;
 
 @RestController
@@ -31,13 +30,11 @@ public class SecurityController {
     @PostMapping("/registration")
     public ResponseEntity<?> registration(@Valid @RequestBody UserSecRegistrationDto registrationDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            // Обработка ошибок валидации
             List<String> errors = bindingResult.getAllErrors().stream()
                     .map(ObjectError::getDefaultMessage)
                     .collect(Collectors.toList());
             return ResponseEntity.badRequest().body(errors);
         }
-        // Если данные прошли валидацию, продолжаем выполнение метода
         userSecurityService.registration(registrationDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -61,5 +58,13 @@ public class SecurityController {
             }
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
         }
+    }
+
+
+
+    @PostMapping("/admin/block/{id}")
+    public ResponseEntity<?> blockUser(@PathVariable Long id) {
+        userSecurityService.blockUserById(id);
+        return ResponseEntity.ok("User blocked successfully");
     }
 }

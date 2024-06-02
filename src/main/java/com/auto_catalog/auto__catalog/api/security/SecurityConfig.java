@@ -49,6 +49,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/api/v1/security/token").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/security/registration").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/security/admin/block/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
