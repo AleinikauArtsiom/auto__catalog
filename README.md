@@ -1,9 +1,11 @@
 AUTO CATALOG APPLICATION
 -------------------
 INTRODUCTION
+
 Auto Catalog is a web application for managing car listings. It provides users with functionalities to create, update, delete, and view listings. The application also includes an admin interface for managing users and their roles.
 -------------------
 TECHNOLOGIES USED
+
 -Java
 -Spring Boot
 -Spring Security
@@ -14,11 +16,13 @@ TECHNOLOGIES USED
 -Maven for Build and Dependency Management
 -------------------
 PREREQUISITES
+
 -Java 17 or higher
 -Maven 3.6.0 or higher
 -PostgreSQL
 -------------------
 INSTALLATION
+
 1.Clone the repository:
 git clone https://github.com/AleinikauArtsiom/auto_catalog.git
 cd auto_catalog
@@ -38,6 +42,7 @@ mvn clean install
 mvn spring-boot:run
 -------------------
 API DOCUMENTATION
+
 API documentation is available through Swagger. After starting the application, you can access it at:
 http://localhost:8080/swagger-ui/index.html
 
