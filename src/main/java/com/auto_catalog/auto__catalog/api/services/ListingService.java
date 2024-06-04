@@ -10,6 +10,7 @@ import com.auto_catalog.auto__catalog.store.repository.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 import java.sql.Timestamp;
@@ -72,6 +73,7 @@ public class ListingService {
         return getListingOrThrowException(id);
     }
 
+    @Transactional
     public void deleteListingById(Long id, Principal principal) {
         User user = userSecurityRepository.findByUserLogin(principal.getName())
                 .map(UserSecurity::getUser)

@@ -65,7 +65,7 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     @SneakyThrows
     @PutMapping("/{user_id}")
-    public ResponseEntity<HttpStatus> updateUser(@PathVariable Long user_id, @RequestBody UserDtoUpdate userDtoUpdate) {
+    public ResponseEntity<HttpStatus> updateUser(@RequestBody UserDtoUpdate userDtoUpdate) {
         return new ResponseEntity<>(userService.updateUser(userDtoUpdate) ? HttpStatus.NO_CONTENT : HttpStatus.CONFLICT);
     }
 

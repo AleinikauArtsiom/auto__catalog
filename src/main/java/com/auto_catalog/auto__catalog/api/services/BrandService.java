@@ -27,9 +27,6 @@ public class BrandService {
         return brandRepository.findAll();
 
     }
-    public Optional<Brand> findByName(String name) {
-        return brandRepository.findByName(name);
-    }
 
     public void deleteBrandById(Long id) {
         getBrandOrThrowException(id);

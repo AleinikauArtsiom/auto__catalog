@@ -53,7 +53,7 @@ public class BodyTypeController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<HttpStatus> updateBodyType(@RequestBody BodyType bodyType, @PathVariable Long id) {
+    public ResponseEntity<HttpStatus> updateBodyType(@RequestBody BodyType bodyType) {
         return new ResponseEntity<>(bodyTypeService.updateBodyType(bodyType) ? HttpStatus.NO_CONTENT :
                 HttpStatus.CONFLICT);
     }

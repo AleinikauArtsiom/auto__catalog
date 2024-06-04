@@ -71,7 +71,7 @@ public class UserSecurityService {
     @Transactional
     public void promoteUserToAdmin(Long id) {
         UserSecurity user = userSecurityRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("No user found with ID " + id));
+                .orElseThrow(() -> new NotFoundException("No user found with ID " + id));
         user.setRole(Roles.valueOf("ADMIN"));
         userSecurityRepository.save(user);
         System.out.println("Role of user with ID " + id + " has been changed to ADMIN");

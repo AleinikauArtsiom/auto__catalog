@@ -4,6 +4,7 @@ import com.auto_catalog.auto__catalog.api.security.entity.dto.AuthRequestDto;
 import com.auto_catalog.auto__catalog.api.security.entity.dto.AuthResponseDto;
 import com.auto_catalog.auto__catalog.api.security.entity.dto.UserSecRegistrationDto;
 import com.auto_catalog.auto__catalog.api.security.service.UserSecurityService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@SecurityRequirement(name = "Bearer Authentication")
 @Transactional
 @RestController
 @RequestMapping("/api/v1/security")
