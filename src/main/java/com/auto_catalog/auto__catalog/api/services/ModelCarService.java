@@ -1,11 +1,9 @@
 package com.auto_catalog.auto__catalog.api.services;
 
-import com.auto_catalog.auto__catalog.api.dto.ListingDto;
 import com.auto_catalog.auto__catalog.api.dto.ModelCarDto;
 import com.auto_catalog.auto__catalog.api.dtoFactories.ModelCarDtoFactory;
 import com.auto_catalog.auto__catalog.api.exception.NotFoundException;
 import com.auto_catalog.auto__catalog.store.entity.Brand;
-import com.auto_catalog.auto__catalog.store.entity.Listing;
 import com.auto_catalog.auto__catalog.store.entity.ModelCar;
 import com.auto_catalog.auto__catalog.store.repository.BrandRepository;
 import com.auto_catalog.auto__catalog.store.repository.ModelCarRepository;
@@ -68,7 +66,6 @@ public class ModelCarService {
                     return brandRepository.save(newBrand);
                 });
 
-        // Создать и сохранить ModelCar
         ModelCar modelCar = modelCarRepository.save(
                 ModelCar.builder()
                         .name(modelCarDto.getName())
@@ -76,7 +73,6 @@ public class ModelCarService {
                         .build()
         );
 
-        // Вернуть DTO
         return modelCarDtoFactory.makeModelCarDtoFactory(modelCar);
     }
 

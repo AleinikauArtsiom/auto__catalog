@@ -85,5 +85,4 @@ public class UserSecurityService {
         userSecurity.setIsBlocked(true);
         userSecurityRepository.save(userSecurity);
     }
-
 }

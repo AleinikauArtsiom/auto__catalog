@@ -1,4 +1,5 @@
 package com.auto_catalog.auto__catalog.store.entity;
+
 import jakarta.persistence.*;
 import lombok.*;
 

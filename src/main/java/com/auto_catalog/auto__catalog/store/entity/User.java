@@ -1,13 +1,8 @@
 package com.auto_catalog.auto__catalog.store.entity;
 
-import com.auto_catalog.auto__catalog.api.dto.UserDto;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.hibernate.annotations.Formula;
-
-import java.util.ArrayList;
 import java.util.List;
 
 

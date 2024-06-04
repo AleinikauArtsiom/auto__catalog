@@ -8,12 +8,10 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -44,8 +42,8 @@ public class SecurityController {
      @PostMapping("/admin/{id}")
      public void promoteUserToAdmin(@PathVariable Long  id){
         userSecurityService.promoteUserToAdmin(id);
-
  }
+
     @PostMapping("/token")
     public ResponseEntity<?> generateToken(@RequestBody AuthRequestDto authRequestDto) {
         try {
@@ -61,8 +59,6 @@ public class SecurityController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
         }
     }
-
-
 
     @PostMapping("/admin/block/{id}")
     public ResponseEntity<?> blockUser(@PathVariable Long id) {

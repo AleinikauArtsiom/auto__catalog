@@ -11,8 +11,6 @@ import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
-
 @Setter
 @Getter
 @Slf4j
@@ -56,5 +54,4 @@ public class JwtUtils {
         }
         return Optional.empty();
     }
-
 }

@@ -5,7 +5,6 @@ import com.auto_catalog.auto__catalog.api.dtoFactories.CarDtoFactory;
 import com.auto_catalog.auto__catalog.api.exception.NotFoundException;
 import com.auto_catalog.auto__catalog.store.entity.BodyType;
 import com.auto_catalog.auto__catalog.store.entity.Car;
-import com.auto_catalog.auto__catalog.store.entity.Listing;
 import com.auto_catalog.auto__catalog.store.entity.ModelCar;
 import com.auto_catalog.auto__catalog.store.repository.BodyTypeRepository;
 import com.auto_catalog.auto__catalog.store.repository.CarRepository;
@@ -58,7 +57,6 @@ public class CarService {
                 .findById(id)
                 .orElseThrow(() -> new NotFoundException("Car with ID " + id + " not found"));
     }
-
 
     public CarDto createCar(CarDto carDto) {
         ModelCar modelCar = modelCarRepository.findByName(carDto.getModelName())

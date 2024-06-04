@@ -1,6 +1,5 @@
 package com.auto_catalog.auto__catalog.api.dtoFactories;
 
-import com.auto_catalog.auto__catalog.api.dto.BrandDto;
 import com.auto_catalog.auto__catalog.api.dto.UserDto;
 import com.auto_catalog.auto__catalog.api.dto.UserDtoUpdate;
 import com.auto_catalog.auto__catalog.store.entity.User;
@@ -11,8 +10,13 @@ import java.util.stream.Collectors;
 
 @Component
 public class UserDtoFactory {
+    private final ListingDtoFactory listingDtoFactory;
+
     @Autowired
-    private ListingDtoFactory listingDtoFactory;
+    public UserDtoFactory(ListingDtoFactory listingDtoFactory) {
+        this.listingDtoFactory = listingDtoFactory;
+    }
+
 
     public UserDto makeUserDto(User user) {
         UserDto userDto = new UserDto();
