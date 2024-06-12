@@ -60,6 +60,7 @@ public class UserController {
     public ResponseEntity<HttpStatus> deleteUserById(@PathVariable Long user_id) {
         userService.deleteUserById(user_id);
         return ResponseEntity.noContent().build();
+        // Artem lox
     }
 
     @PreAuthorize("hasRole('ADMIN')")
